@@ -1,40 +1,67 @@
 #pragma once
+enum errCodes { noErr = 0, devideByZero = 1 };
 
 
+static errCodes defaultErrCode = errCodes::noErr;
 
+
+template <typename T>
 class vec3
 {
 public:
-	enum errCodes{noErr = 0 , devideByZero = 1};
-
-	static errCodes errCode;
-	double x, y, z;
-	vec3(double, double, double);
+	static T dVal;
+	T x, y, z;
+	vec3();
+	vec3(T, T, T);
 	double mag();
 	double mag2();
 	bool normalize();
 	void multiply(double);
+
+	static double dot(vec3<T> a, vec3<T> b);//dot product
+
+	static vec3<T> cross(vec3<T> a, vec3<T> b);//cross product
+
+	static vec3<T> multiply(vec3<T> a, double factor);
+
+	static vec3<T> add(vec3<T> a, vec3<T> b);
+
+	static vec3<T> subtract(vec3<T> a, vec3<T> b);//a-b
+
+	static double angle(vec3<T> a, vec3<T> b, errCodes* err = &defaultErrCode);//in radian
+
+	static double component(vec3<T> of, vec3<T> along, errCodes* err = &defaultErrCode);
+
+	static vec3<T> normalize(vec3<T> a, errCodes* err = &defaultErrCode);
+
+	static bool isNUL(vec3<T> a);
+
+	static bool isEqual(vec3<T> a, vec3<T> b);
 };
 
 
-//non class functions
+typedef vec3<long double> vec3ld;
 
-double dot(vec3 a, vec3 b);//dot product
+typedef vec3<double> vec3d;
 
-vec3 cross(vec3 a, vec3 b);//cross product
+typedef vec3<float> vec3f;
 
-vec3 multiply(vec3 a, double factor);
+typedef vec3<int> vec3i;
 
-vec3 add(vec3 a, vec3 b);
+typedef vec3<unsigned int> vec3ui;
 
-vec3 subtract(vec3 a, vec3 b);//a-b
+typedef vec3<long> vec3l;
 
-double angle(vec3 a, vec3 b, vec3::errCodes* err = &vec3::errCode);//in radian
+typedef vec3<unsigned long> vec3ul;
 
-double component(vec3 of, vec3 along, vec3::errCodes* err = &vec3::errCode);
+typedef vec3<long long> vec3ll;
 
-vec3 normalize(vec3 a, vec3::errCodes* err = &vec3::errCode);
+typedef vec3<unsigned long long> vec3ull;
 
-bool isNUL(vec3 a);
+typedef vec3<short> vec3s;
 
-bool isEqual(vec3 a, vec3 b);
+typedef vec3<unsigned short> vec3us;
+
+typedef vec3<char> vec3c;
+
+typedef vec3<unsigned char> vec3uc;
