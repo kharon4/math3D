@@ -39,29 +39,43 @@ public:
 	static bool isEqual(vec3<T> a, vec3<T> b);
 };
 
+//declaration macro
+#define declareVec3(type , name) typedef vec3<type> name;
 
-typedef vec3<long double> vec3ld;
+//defination macro
+#define defineVec3(type , name , val)type name::dVal = val;\
+void init_##name(){\
+name obj;\
+name obj1(name::dVal, name::dVal, name::dVal);\
+obj.mag();\
+obj.mag2();\
+obj.normalize();\
+obj.multiply(1);\
+name::dot(name() ,name());\
+name::cross(name(),name());\
+name::multiply(name(),1);\
+name::add(name(),name());\
+name::subtract(name(),name());\
+name::angle(name(),name());\
+name::component(name(),name());\
+name::normalize(name());\
+name::isNUL(name());\
+name::isEqual(name(),name());\
+}
 
-typedef vec3<double> vec3d;
 
-typedef vec3<float> vec3f;
+//declare vec3 types here
+declareVec3(double , vec3d)
+declareVec3(long double , vec3ld)
+declareVec3(float , vec3f)
+declareVec3(int , vec3i)
+declareVec3(unsigned int , vec3ui)
+declareVec3(long , vec3l)
+declareVec3(unsigned long , vec3ul)
+declareVec3(long long , vec3ll)
+declareVec3(unsigned long long , vec3ull)
+declareVec3(short, vec3s)
+declareVec3(unsigned short, vec3us)
+declareVec3(char, vec3c)
+declareVec3(unsigned char, vec3uc)
 
-typedef vec3<int> vec3i;
-
-typedef vec3<unsigned int> vec3ui;
-
-typedef vec3<long> vec3l;
-
-typedef vec3<unsigned long> vec3ul;
-
-typedef vec3<long long> vec3ll;
-
-typedef vec3<unsigned long long> vec3ull;
-
-typedef vec3<short> vec3s;
-
-typedef vec3<unsigned short> vec3us;
-
-typedef vec3<char> vec3c;
-
-typedef vec3<unsigned char> vec3uc;
