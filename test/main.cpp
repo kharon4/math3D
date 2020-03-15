@@ -4,16 +4,35 @@
 #include "headers/rotation.h"
 
 int main() {
-	vec3ld temp(0,0,0);
-	std::cout<<temp.normalize();
-	temp = vec3ld::add(temp, vec3ld(-10, -20, -50));
-	std::cout << (int)defaultErrCode << std::endl;
-	//vec3d::normalize(temp);
-	std::cout << (int)defaultErrCode << std::endl;
-	
-	linearMathLD::plane p(vec3ld(0,0,0),vec3ld(1,0,40));
-	linearMathLD::getPt(p, &temp, coordinateName::zCoordinate);
+	vec3f temp(10,0,0);
+	manipulation3dF::transform t;
+	manipulation3dF::coordinateSystem c2(vec3f(1, 1, 1),vec3f(manipulation3dF::pi/2,0, manipulation3dF::pi / 2),vec3f(1,2,3));
+	t.CS.set(c2);
 
+
+
+	temp = t.CS.getAxis()[0];
 	std::cout << temp.x << " , " << temp.y << " , " << temp.z << std::endl;
+	temp = t.CS.getAxis()[1];
+	std::cout << temp.x << " , " << temp.y << " , " << temp.z << std::endl;
+	temp = t.CS.getAxis()[2];
+	std::cout << temp.x << " , " << temp.y << " , " << temp.z << std::endl;
+
+	temp = t.CS.getOrigin();
+	std::cout << temp.x << " , " << temp.y << " , " << temp.z << std::endl;
+	temp = t.CS.getAngle();
+	std::cout << temp.x << " , " << temp.y << " , " << temp.z << std::endl;
+	temp = t.CS.getScale();
+	std::cout << temp.x << " , " << temp.y << " , " << temp.z << std::endl;
+	t.CS.setAngle(vec3f(0, 0, 0));
+	t.CS.setOrigin(vec3f(0, 0, 0));
+	t.CS.setScale(vec3f(1, 1, 1));
+	temp = vec3f(10, 0, 0);
+	t.addVec(temp, &temp);
+	t.addRelativeRot(vec3f(manipulation3dF::pi / 2, 0, 0));
+	t.addRelativePos(vec3f(5, -10, 0));
+	t.update();
+	std::cout << temp.x << " , " << temp.y << " , " << temp.z << std::endl;
+
 	system("pause");
 }

@@ -36,10 +36,10 @@ namespace manipulation3dD {//double precision
 	public:
 		
 		
-		vec3d setOrigin(vec3d);
-		vec3d setAngle(vec3d);
-		vec3d setScale(vec3d);
-		vec3d setAxis(vec3d*);
+		void setOrigin(vec3d);
+		void setAngle(vec3d);
+		void setScale(vec3d);
+		void setAxis(vec3d*);
 
 
 		vec3d getOrigin();
@@ -74,6 +74,136 @@ namespace manipulation3dD {//double precision
 		std::vector<vec3d>* getData() { return &data; }
 	};
 
+}
 
+namespace manipulation3dF {//single precision
+
+	static char errCode = 0;
+
+	static const float pi = 3.14159;
+
+	float toDeg(float rad);
+	float toRad(float deg);
+
+	vec3f getDir(float yaw, float pitch);//get vector from 2 angles
+
+	vec3f getRotation(vec3f a);//get 2 angles froma vector
+
+
+	//coordinate system
+	//a raw frame of reference that can be used to switch between global and frame of ref coordinate systems 
+	class coordinateSystem {
+	private:
+		vec3f origin;
+		vec3f angle;
+		vec3f scale;
+		vec3f axis[3];
+		bool reset = true;
+	public:
+
+
+		void setOrigin(vec3f);
+		void setAngle(vec3f);
+		void setScale(vec3f);
+		void setAxis(vec3f*);
+
+
+		vec3f getOrigin();
+		vec3f getAngle();
+		vec3f getScale();
+		vec3f* getAxis();
+
+
+		coordinateSystem(vec3f Origin = vec3f(0, 0, 0), vec3f Rot = vec3f(0, 0, 0), vec3f Scale = vec3f(1, 1, 1));
+		void set(coordinateSystem& cs);
+		vec3f getAngle(vec3f* axis);
+		vec3f getScale(vec3f* axis);
+		void resetAxis();
+		vec3f getInCoordinateSystem(vec3f realCoord);
+		vec3f getRealWorldCoordinates(vec3f CSCoord);
+	};
+
+
+	class transform {
+	private:
+		std::vector <vec3f> data;
+		std::vector <vec3f*> dataAdress;
+	public:
+		coordinateSystem CS;
+		void addRelativeRot(vec3f rot);
+		void addRelativePos(vec3f pos);
+
+		void addVec(vec3f val, vec3f* adress);
+
+		void update();
+
+		std::vector<vec3f>* getData() { return &data; }
+	};
+
+}
+
+namespace manipulation3dLD {//long long double precision
+
+	static char errCode = 0;
+
+	static const float pi = 3.14159;
+
+	long double toDeg(long double rad);
+	long double toRad(long double deg);
+
+	vec3ld getDir(long double yaw, long double pitch);//get vector from 2 angles
+
+	vec3ld getRotation(vec3ld a);//get 2 angles froma vector
+
+
+	//coordinate system
+	//a raw frame of reference that can be used to switch between global and frame of ref coordinate systems 
+	class coordinateSystem {
+	private:
+		vec3ld origin;
+		vec3ld angle;
+		vec3ld scale;
+		vec3ld axis[3];
+		bool reset = true;
+	public:
+
+
+		void setOrigin(vec3ld);
+		void setAngle(vec3ld);
+		void setScale(vec3ld);
+		void setAxis(vec3ld*);
+
+
+		vec3ld getOrigin();
+		vec3ld getAngle();
+		vec3ld getScale();
+		vec3ld* getAxis();
+
+
+		coordinateSystem(vec3ld Origin = vec3ld(0, 0, 0), vec3ld Rot = vec3ld(0, 0, 0), vec3ld Scale = vec3ld(1, 1, 1));
+		void set(coordinateSystem& cs);
+		vec3ld getAngle(vec3ld* axis);
+		vec3ld getScale(vec3ld* axis);
+		void resetAxis();
+		vec3ld getInCoordinateSystem(vec3ld realCoord);
+		vec3ld getRealWorldCoordinates(vec3ld CSCoord);
+	};
+
+
+	class transform {
+	private:
+		std::vector <vec3ld> data;
+		std::vector <vec3ld*> dataAdress;
+	public:
+		coordinateSystem CS;
+		void addRelativeRot(vec3ld rot);
+		void addRelativePos(vec3ld pos);
+
+		void addVec(vec3ld val, vec3ld* adress);
+
+		void update();
+
+		std::vector<vec3ld>* getData() { return &data; }
+	};
 
 }
