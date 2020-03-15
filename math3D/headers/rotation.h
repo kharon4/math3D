@@ -67,7 +67,7 @@ namespace manipulation3dD {//double precision
 		void addRelativeRot(vec3d rot);
 		void addRelativePos(vec3d pos);
 
-		void addVec(vec3d val, vec3d* adress);
+		void addVec(vec3d val, vec3d* address);
 
 		void update();
 
@@ -133,7 +133,7 @@ namespace manipulation3dF {//single precision
 		void addRelativeRot(vec3f rot);
 		void addRelativePos(vec3f pos);
 
-		void addVec(vec3f val, vec3f* adress);
+		void addVec(vec3f val, vec3f* address);
 
 		void update();
 
@@ -199,7 +199,7 @@ namespace manipulation3dLD {//long long double precision
 		void addRelativeRot(vec3ld rot);
 		void addRelativePos(vec3ld pos);
 
-		void addVec(vec3ld val, vec3ld* adress);
+		void addVec(vec3ld val, vec3ld* address);
 
 		void update();
 
