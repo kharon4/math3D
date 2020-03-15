@@ -2,7 +2,7 @@
 
 # math3D
 
-### math3D is a simple cpp lib for 3d math calculations. Using vector algebra.
+### math3D is a simple cpp lib for 3d math calculations, using vector algebra.
 
 ### It implements :
 - [x] vec3 for different cpp data types
