@@ -1,4 +1,14 @@
 math3D/x64/
 test/x64/
-x64/
+x64/Debug/
+x64/Release/test.iobj
+x64/Release/test.ipdb
+x64/Release/test.pdb
+
+math3D/Release/
+test/Release/
+Release/test.iobj
+Release/test.ipdb
+Release/test.pdb
+
 .vs/
