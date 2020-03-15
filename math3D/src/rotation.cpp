@@ -30,6 +30,26 @@ namespace manipulation3dD {
 
 
 	//coordinate system functions
+
+	vec3d coordinateSystem::setOrigin(vec3d vec) { origin = vec; }
+	vec3d coordinateSystem::setAngle(vec3d vec) { angle = vec; reset = true; }
+	vec3d coordinateSystem::setScale(vec3d vec) { scale = vec; reset = true; }
+	vec3d coordinateSystem::setAxis(vec3d* Axis) {
+		axis[0] = Axis[0];
+		axis[1] = Axis[1];
+		axis[2] = Axis[2];
+		//set scale
+		scale = getScale(axis);
+
+		//set angle
+		angle = getAngle(axis);
+	}
+
+	vec3d coordinateSystem::getOrigin() { return origin; }
+	vec3d coordinateSystem::getAngle() { return angle; }
+	vec3d coordinateSystem::getScale() { return scale; }
+	vec3d* coordinateSystem::getAxis() { if (reset)resetAxis(); reset = false; return axis; };
+
 	coordinateSystem::coordinateSystem(vec3d Origin, vec3d Rot, vec3d Scale) {
 		origin = Origin;
 		angle = Rot;
@@ -50,8 +70,33 @@ namespace manipulation3dD {
 		axis[2] = vec3d::multiply(cAxis[1], scale.z);
 	}
 
+	void coordinateSystem::set(coordinateSystem& cs) {
+		//set origin
+		origin = cs.getOrigin();
+		
+		//set axis
+		setAxis(cs.getAxis());
+	}
+
+	vec3d coordinateSystem::getScale(vec3d* axis) {
+		return vec3d(axis[0].mag(), axis[1].mag(), axis[2].mag());
+	}
+
+	vec3d coordinateSystem::getAngle(vec3d* axis) {
+		vec3d rVal;
+		rVal = getRotation(axis[0]);
+		vec3d tempAxis = getDir(angle.x + pi / 2, 0);
+		rVal.z = vec3d::angle(tempAxis, axis[1]);
+		tempAxis = getDir(angle.x, angle.y + pi / 2);
+		if (vec3d::dot(tempAxis, axis[1]) < 0)rVal.z *= -1;
+		return rVal;
+	}
 
 	vec3d coordinateSystem::getInCoordinateSystem(vec3d realCoord) {
+		if (reset) {
+			resetAxis();
+			reset = false;
+		}
 		vec3d rVal;
 		realCoord = vec3d::subtract(realCoord, origin);
 		rVal.x = vec3d::component(realCoord, axis[0]);
@@ -68,9 +113,16 @@ namespace manipulation3dD {
 	}
 
 	vec3d coordinateSystem::getRealWorldCoordinates(vec3d CSCoord) {
+		if (reset) {
+			resetAxis();
+			reset = false;
+		}
 		return vec3d::add(origin, vec3d::add(vec3d::multiply(axis[0], CSCoord.x), vec3d::add(vec3d::multiply(axis[1], CSCoord.y), vec3d::multiply(axis[2], CSCoord.z))));
 	}
 
+
+
+	//transform functions
 
 	void transform::addVec(vec3d val, vec3d* adress) {
 		data.push_back(CS.getInCoordinateSystem(val));
@@ -84,17 +136,16 @@ namespace manipulation3dD {
 	}
 
 	void transform::addRelativeRot(vec3d rot) {
+		
 		vec3d oldAxis[3];
-		oldAxis[0] = getDir(CS.angle.x, CS.angle.y);
-		oldAxis[1] = getDir(CS.angle.x + pi / 2, 0/*CS.angle.y*/);
-		oldAxis[2] = getDir(CS.angle.x, CS.angle.y + pi / 2);
-		{
-			vec3d temp[2];
-			temp[0] = vec3d::add(vec3d::multiply(oldAxis[1], cos(CS.angle.z)), vec3d::multiply(oldAxis[2], sin(CS.angle.z)));
-			temp[1] = vec3d::cross(oldAxis[0], temp[1]);
-			oldAxis[1] = temp[0];
-			oldAxis[2] = temp[1];
-		}
+		vec3d scale = CS.getScale();
+		if (scale.x == 0)scale.x = 1;
+		if (scale.y == 0)scale.y = 1;
+		if (scale.z == 0)scale.z = 1;
+		oldAxis[0] = vec3d::multiply(CS.getAxis()[0], 1 / scale.x);
+		oldAxis[1] = vec3d::multiply(CS.getAxis()[1], 1 / scale.y);
+		oldAxis[2] = vec3d::multiply(CS.getAxis()[2], 1 / scale.z);
+		
 
 		vec3d dir[3];
 		dir[0] = getDir(rot.x, rot.y);
@@ -108,25 +159,25 @@ namespace manipulation3dD {
 			dir[2] = temp[1];
 		}
 
-		CS.axis[0] = vec3d::multiply(vec3d::add(vec3d::multiply(oldAxis[0], dir[0].x), vec3d::add(vec3d::multiply(oldAxis[1], dir[0].y), vec3d::multiply(oldAxis[2], dir[0].z))), CS.scale.x);
-		CS.axis[1] = vec3d::multiply(vec3d::add(vec3d::multiply(oldAxis[0], dir[1].x), vec3d::add(vec3d::multiply(oldAxis[1], dir[1].y), vec3d::multiply(oldAxis[2], dir[1].z))), CS.scale.y);
-		CS.axis[2] = vec3d::multiply(vec3d::add(vec3d::multiply(oldAxis[0], dir[2].x), vec3d::add(vec3d::multiply(oldAxis[1], dir[2].y), vec3d::multiply(oldAxis[2], dir[2].z))), CS.scale.z);
-
+		scale = CS.getScale();
+		vec3d newAxis[3];
+		newAxis[0] = vec3d::multiply(vec3d::add(vec3d::multiply(oldAxis[0], dir[0].x), vec3d::add(vec3d::multiply(oldAxis[1], dir[0].y), vec3d::multiply(oldAxis[2], dir[0].z))), scale.x);
+		newAxis[1] = vec3d::multiply(vec3d::add(vec3d::multiply(oldAxis[0], dir[1].x), vec3d::add(vec3d::multiply(oldAxis[1], dir[1].y), vec3d::multiply(oldAxis[2], dir[1].z))), scale.y);
+		newAxis[2] = vec3d::multiply(vec3d::add(vec3d::multiply(oldAxis[0], dir[2].x), vec3d::add(vec3d::multiply(oldAxis[1], dir[2].y), vec3d::multiply(oldAxis[2], dir[2].z))), scale.z);
+		CS.setAxis(newAxis);
 	}
 
 
 	void transform::addRelativePos(vec3d pos) {
 		vec3d Axis[3];
-		Axis[0] = getDir(CS.angle.x, CS.angle.y);
-		Axis[1] = getDir(CS.angle.x + pi / 2, 0);
-		Axis[2] = getDir(CS.angle.x, CS.angle.y + pi / 2);
-		{
-			vec3d temp[2];
-			temp[0] = vec3d::add(vec3d::multiply(Axis[1], cos(CS.angle.z)), vec3d::multiply(Axis[2], sin(CS.angle.z)));
-			temp[1] = vec3d::cross(Axis[0], temp[0]);
-			Axis[1] = temp[0];
-			Axis[2] = temp[1];
-		}
-		CS.origin = vec3d::add(CS.origin, vec3d::add(vec3d::multiply(Axis[0], pos.x), vec3d::add(vec3d::multiply(Axis[1], pos.y), vec3d::multiply(Axis[2], pos.z))));
+		vec3d scale = CS.getScale();
+		if (scale.x == 0)scale.x = 1;
+		if (scale.y == 0)scale.y = 1;
+		if (scale.z == 0)scale.z = 1;
+		Axis[0] = vec3d::multiply(CS.getAxis()[0], 1 / scale.x);
+		Axis[1] = vec3d::multiply(CS.getAxis()[1], 1 / scale.y);
+		Axis[2] = vec3d::multiply(CS.getAxis()[2], 1 / scale.z);
+
+		CS.setOrigin(vec3d::add(CS.getOrigin(), vec3d::add(vec3d::multiply(Axis[0], pos.x), vec3d::add(vec3d::multiply(Axis[1], pos.y), vec3d::multiply(Axis[2], pos.z)))));
 	}
 }
