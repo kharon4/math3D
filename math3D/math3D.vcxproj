@@ -139,10 +139,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\linearMath.cpp" />
+    <ClCompile Include="src\rotation.cpp" />
     <ClCompile Include="src\vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\linearMath.h" />
+    <ClInclude Include="headers\rotation.h" />
     <ClInclude Include="headers\vec3.h" />
     <ClInclude Include="headers\vec3Types.h" />
   </ItemGroup>
