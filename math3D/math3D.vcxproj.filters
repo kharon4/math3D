@@ -18,12 +18,18 @@
     <ClCompile Include="src\vec3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\linearMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\vec3Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\linearMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

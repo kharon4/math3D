@@ -37,6 +37,13 @@ public:
 	static bool isNUL(vec3<T> a);
 
 	static bool isEqual(vec3<T> a, vec3<T> b);
+
+	template<typename N>
+	void convert(vec3<N> in) {
+		x = (T)in.x;
+		y = (T)in.y;
+		z = (T)in.z;
+	}
 };
 
 //declaration macro
