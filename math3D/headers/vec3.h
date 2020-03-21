@@ -38,13 +38,49 @@ public:
 
 	static bool isEqual(vec3<T> a, vec3<T> b);
 
+
+
 	template<typename N>
 	void convert(vec3<N> in) {
 		x = (T)in.x;
 		y = (T)in.y;
 		z = (T)in.z;
 	}
+
+	vec3<T> operator + (vec3<T> const other)const { return add(*this, other); }
+
+	void operator += (vec3<T> const other) { *this = add(*this, other); }
+
+	vec3<T> operator - (vec3<T> const other)const { return subtract(*this, other); }
+
+	vec3<T> operator - ()const{return multiply(*this, -1);}
+
+	void operator -= (vec3<T> const other) { *this = subtract(*this, other); }
+
+	vec3<T> operator * (double const other)const{ return multiply(*this, other); }
+
+	void operator *= (double const other) { *this = multiply(*this, other); }
+
+	vec3<T> operator * (vec3<T> const other)const { return cross(*this, other); }
+
+	void operator *= ( vec3<T> const other) { *this = cross(*this, other); }
+
+	vec3<T> operator / (double const other)const { return multiply(*this, 1 / other); }
+
+	void operator /= (double const other) { *this = multiply(*this, 1 / other); }
+
+	double operator / (vec3<T> const other)const { return dot(*this, other); }
+	
+	bool operator == (vec3<T> const other)const { return isEqual(*this, other); }
+	
+	bool operator != (vec3<T> const other)const { return !isEqual(*this, other); }
+	
+	
 };
+
+template <typename T>
+vec3<T> operator * (double const other, vec3<T> vec){ return vec3<T>::multiply(vec, other); }
+
 
 //declaration macro
 #define declareVec3(type , name) typedef vec3<type> name;
