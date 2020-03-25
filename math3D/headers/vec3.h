@@ -38,6 +38,10 @@ public:
 
 	static bool isEqual(vec3<T> a, vec3<T> b);
 
+	//dir based vectors
+	vec3<T> vecX(T val) { return vec3<T>(val, 0, 0); }
+	vec3<T> vecY(T val) { return vec3<T>(0, val, 0); }
+	vec3<T> vecZ(T val) { return vec3<T>(0, 0, val); }
 
 
 	template<typename N>
@@ -80,6 +84,7 @@ public:
 
 template <typename T>
 vec3<T> operator * (double const other, vec3<T> vec){ return vec3<T>::multiply(vec, other); }
+
 
 
 //declaration macro
