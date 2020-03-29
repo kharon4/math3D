@@ -180,6 +180,20 @@ namespace manipulation3dD {
 
 		CS.setOrigin(vec3d::add(CS.getOrigin(), vec3d::add(vec3d::multiply(Axis[0], pos.x), vec3d::add(vec3d::multiply(Axis[1], pos.y), vec3d::multiply(Axis[2], pos.z)))));
 	}
+
+	void transform::addRotationAboutAxis(vec3d W) {
+		transform T;
+		vec3d angle = getRotation(W);
+		T.CS.setAngle(angle);
+		vec3d oldAxis[3] = { CS.getAxis()[0],CS.getAxis()[1],CS.getAxis()[2] };
+		T.addVec(oldAxis[0], oldAxis);
+		T.addVec(oldAxis[1], oldAxis + 1);
+		T.addVec(oldAxis[2], oldAxis + 2);
+		angle.z = W.mag();
+		T.CS.setAngle(angle);
+		T.update();
+		T.CS.setAxis(oldAxis);
+	}
 }
 
 
@@ -361,6 +375,20 @@ namespace manipulation3dF {
 
 		CS.setOrigin(vec3f::add(CS.getOrigin(), vec3f::add(vec3f::multiply(Axis[0], pos.x), vec3f::add(vec3f::multiply(Axis[1], pos.y), vec3f::multiply(Axis[2], pos.z)))));
 	}
+
+	void transform::addRotationAboutAxis(vec3f W) {
+		transform T;
+		vec3f angle = getRotation(W);
+		T.CS.setAngle(angle);
+		vec3f oldAxis[3] = { CS.getAxis()[0],CS.getAxis()[1],CS.getAxis()[2] };
+		T.addVec(oldAxis[0], oldAxis);
+		T.addVec(oldAxis[1], oldAxis + 1);
+		T.addVec(oldAxis[2], oldAxis + 2);
+		angle.z = W.mag();
+		T.CS.setAngle(angle);
+		T.update();
+		T.CS.setAxis(oldAxis);
+	}
 }
 
 
@@ -541,5 +569,19 @@ namespace manipulation3dLD {
 		Axis[2] = vec3ld::multiply(CS.getAxis()[2], 1 / scale.z);
 
 		CS.setOrigin(vec3ld::add(CS.getOrigin(), vec3ld::add(vec3ld::multiply(Axis[0], pos.x), vec3ld::add(vec3ld::multiply(Axis[1], pos.y), vec3ld::multiply(Axis[2], pos.z)))));
+	}
+
+	void transform::addRotationAboutAxis(vec3ld W) {
+		transform T;
+		vec3ld angle = getRotation(W);
+		T.CS.setAngle(angle);
+		vec3ld oldAxis[3] = { CS.getAxis()[0],CS.getAxis()[1],CS.getAxis()[2] };
+		T.addVec(oldAxis[0], oldAxis);
+		T.addVec(oldAxis[1], oldAxis + 1);
+		T.addVec(oldAxis[2], oldAxis + 2);
+		angle.z = W.mag();
+		T.CS.setAngle(angle);
+		T.update();
+		T.CS.setAxis(oldAxis);
 	}
 }

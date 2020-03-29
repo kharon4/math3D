@@ -66,6 +66,7 @@ namespace manipulation3dD {//double precision
 		coordinateSystem CS;
 		void addRelativeRot(vec3d rot);
 		void addRelativePos(vec3d pos);
+		void addRotationAboutAxis(vec3d W);//rotation of |W| anticlocwise about w
 
 		void addVec(vec3d val, vec3d* address);
 
@@ -132,6 +133,7 @@ namespace manipulation3dF {//single precision
 		coordinateSystem CS;
 		void addRelativeRot(vec3f rot);
 		void addRelativePos(vec3f pos);
+		void addRotationAboutAxis(vec3f W);//rotation of |W| anticlocwise about w
 
 		void addVec(vec3f val, vec3f* address);
 
@@ -198,6 +200,7 @@ namespace manipulation3dLD {//long long double precision
 		coordinateSystem CS;
 		void addRelativeRot(vec3ld rot);
 		void addRelativePos(vec3ld pos);
+		void addRotationAboutAxis(vec3ld W);//rotation of |W| anticlocwise about w
 
 		void addVec(vec3ld val, vec3ld* address);
 
