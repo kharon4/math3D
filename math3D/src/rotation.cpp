@@ -192,7 +192,7 @@ namespace manipulation3dD {
 		angle.z = W.mag();
 		T.CS.setAngle(angle);
 		T.update();
-		CS.setAxis(oldAxis);
+		T.CS.setAxis(oldAxis);
 	}
 }
 
@@ -387,7 +387,7 @@ namespace manipulation3dF {
 		angle.z = W.mag();
 		T.CS.setAngle(angle);
 		T.update();
-		CS.setAxis(oldAxis);
+		T.CS.setAxis(oldAxis);
 	}
 }
 
@@ -582,6 +582,6 @@ namespace manipulation3dLD {
 		angle.z = W.mag();
 		T.CS.setAngle(angle);
 		T.update();
-		CS.setAxis(oldAxis);
+		T.CS.setAxis(oldAxis);
 	}
 }
