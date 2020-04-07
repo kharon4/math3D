@@ -1,0 +1,9 @@
+*/
+*.*
+
+!.gitignore
+!math3D_CUDA.vcxproj
+!math3D_CUDA.vcxproj.filters
+
+!headers/
+!src/
