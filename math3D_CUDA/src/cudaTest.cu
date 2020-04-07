@@ -10,8 +10,7 @@ cudaError_t addWithCuda(vec3d* c,vec3d *a, unsigned int size);
 __global__ void addKernel(vec3d* c,vec3d *a)
 {
     int i = threadIdx.x;
-    c[i] = vec3d(i,i+1,i+2);
-    c[i] = vec3d::add(c[i], a[i]);
+    c[i] = vec3d::normalizeRaw(a[i]);
 }
 
 int Main()
