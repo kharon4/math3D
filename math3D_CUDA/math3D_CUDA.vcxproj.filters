@@ -24,8 +24,10 @@
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\cudaTest.cu" />
+    <CudaCompile Include="headers\vec3.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\cudaTest.cuh" />
+    <ClInclude Include="headers\vec3.cuh" />
   </ItemGroup>
 </Project>
