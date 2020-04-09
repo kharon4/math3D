@@ -25,9 +25,11 @@
   <ItemGroup>
     <CudaCompile Include="src\cudaTest.cu" />
     <CudaCompile Include="headers\vec3.cu" />
+    <CudaCompile Include="src\linearMath.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\cudaTest.cuh" />
     <ClInclude Include="headers\vec3.cuh" />
+    <ClInclude Include="headers\linearMath.cuh" />
   </ItemGroup>
 </Project>
