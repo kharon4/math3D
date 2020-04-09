@@ -1,8 +1,8 @@
 
 #include "cudaTest.cuh"
-#include "vec3.cuh"
+#include "linearMath.cuh"
+//#include "vec3.cuh"
 //#include "vec3.cu"
-//#include "./../src/vec3.cu"
 #include <stdio.h>
 
 cudaError_t addWithCuda(vec3d* c,vec3d *a, unsigned int size);
