@@ -11,7 +11,8 @@
 	- [x] translation
 	- [x] scaling
 	- [x] rotation
-	- [x] CUDA compatibility
+- [x] CUDA supported vec3
+- [x] CUDA supported linear math
 
 ### Future plans :
 - [ ] support for Matrix based transformations
