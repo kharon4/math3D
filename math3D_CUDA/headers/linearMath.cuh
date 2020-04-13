@@ -274,7 +274,8 @@ namespace linearMathLD {//long double precesion
 	__host__ __device__ bool rayCast(line l, plane p, vec3ld& intersection);
 }
 
-
+#ifndef math3D_DeclrationOnly
 #ifndef INSIDE_linearMath_CU_FILE
 #include "linearMath.cu"
+#endif
 #endif
