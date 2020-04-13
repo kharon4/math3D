@@ -1,3 +1,5 @@
+#pragma once
+#define INSIDE_linearMath_CU_FILE 1
 #include "linearMath.cuh"
 
 #include <math.h>

@@ -1,5 +1,5 @@
 #pragma once
-#define INSIDE_CU_FILE 1
+#define INSIDE_VEC3_CU_FILE 1
 #include "vec3.cuh"
 
 template <typename T>

@@ -105,6 +105,6 @@ declareVec3(unsigned short, vec3us)
 declareVec3(char, vec3c)
 declareVec3(unsigned char, vec3uc)
 
-#ifndef INSIDE_CU_FILE
+#ifndef INSIDE_VEC3_CU_FILE
 #include "vec3.cu"
 #endif
