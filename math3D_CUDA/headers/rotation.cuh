@@ -78,3 +78,9 @@ namespace manipulation3dD {//double precision
 	};
 
 }
+
+#ifndef math3D_DeclrationOnly
+#ifndef INSIDE_ROTATION_CU_FILE
+#include "rotation.cu"
+#endif
+#endif

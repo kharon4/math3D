@@ -1,4 +1,6 @@
 #pragma once
+
+#define INSIDE_ROTATION_CU_FILE 1
 #include "rotation.cuh"
 
 #include<math.h>
@@ -119,9 +121,9 @@ namespace manipulation3dD {
 		}
 		vec3d rVal;
 		realCoord = vec3d::subtract(realCoord, origin);
-		rVal.x = vec3d::component(realCoord, axis[0]);
-		rVal.y = vec3d::component(realCoord, axis[1]);
-		rVal.z = vec3d::component(realCoord, axis[2]);
+		rVal.x = vec3d::componentRaw_s(realCoord, axis[0]);
+		rVal.y = vec3d::componentRaw_s(realCoord, axis[1]);
+		rVal.z = vec3d::componentRaw_s(realCoord, axis[2]);
 		vec3d Scale = scale;
 		if (Scale.x == 0)Scale.x == 1;
 		if (Scale.y == 0)Scale.y == 1;
@@ -201,12 +203,12 @@ namespace manipulation3dD {
 	//transform functions
 	__host__ void transform::addVec(vec3d val, vec3d* adress) {
 		data.push_back(CS.getInCoordinateSystem(val));
-		dataAdress.push_back(adress);
+		dataAddress.push_back(adress);
 	}
 
 	__host__ void transform::update() {
 		for (int i = 0; i < data.size(); ++i) {
-			*(dataAdress[i]) = CS.getRealWorldCoordinates(data[i]);
+			*(dataAddress[i]) = CS.getRealWorldCoordinates(data[i]);
 		}
 	}
 
