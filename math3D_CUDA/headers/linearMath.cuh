@@ -93,6 +93,11 @@ namespace linearMathD {//double precesion
 	__host__ __device__ vec3d intersectionRaw_s(line l, plane p);
 	__host__ __device__ vec3d intersectionRaw(line l, plane p);
 
+	__host__ __device__ bool intersectionLambda(line l, plane p, double& OUTlambda);
+	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, double& OUTlambda, double defaultVal = -1);
+	__host__ __device__ double intersectionLambdaRaw(line l, plane p);
+	__host__ __device__ vec3d getPt(line l, double lambda);
+
 	//ray cast
 	__host__ __device__ bool rayCast(line l, plane p, vec3d& intersection);
 }
@@ -180,6 +185,11 @@ namespace linearMathF {//single precesion
 	__host__ __device__ vec3f intersection(line l, plane p, bool* error);
 	__host__ __device__ vec3f intersectionRaw_s(line l, plane p);
 	__host__ __device__ vec3f intersectionRaw(line l, plane p);
+
+	__host__ __device__ bool intersectionLambda(line l, plane p, float& OUTlambda);
+	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, float& OUTlambda, float defaultVal = -1);
+	__host__ __device__ float intersectionLambdaRaw(line l, plane p);
+	__host__ __device__ vec3f getPt(line l, float lambda);
 
 	//ray cast
 	__host__ __device__ bool rayCast(line l, plane p, vec3f& intersection);
@@ -269,6 +279,11 @@ namespace linearMathLD {//long double precesion
 	__host__ __device__ vec3ld intersection(line l, plane p, bool* error);
 	__host__ __device__ vec3ld intersectionRaw_s(line l, plane p);
 	__host__ __device__ vec3ld intersectionRaw(line l, plane p);
+
+	__host__ __device__ bool intersectionLambda(line l, plane p, long double& OUTlambda);
+	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, long double& OUTlambda, long double defaultVal = -1);
+	__host__ __device__ long double intersectionLambdaRaw(line l, plane p);
+	__host__ __device__ vec3ld getPt(line l, long double lambda);
 
 	//ray cast
 	__host__ __device__ bool rayCast(line l, plane p, vec3ld& intersection);

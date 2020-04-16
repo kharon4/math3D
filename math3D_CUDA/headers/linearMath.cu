@@ -336,7 +336,7 @@ namespace linearMathD {//double precesion
 		else {
 			*error = false;//no error
 			double lambda;
-			lambda = (vec3d::dot(p.getPt(), p.getDr()) - vec3d::dot(p.getDr(), l.getPt())) / vec3d::dot(p.getDr(), l.getDr());
+			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
 			vec3d rVal = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
 			return rVal;
 		}
@@ -348,7 +348,7 @@ namespace linearMathD {//double precesion
 		}
 		else {
 			double lambda;
-			lambda = (vec3d::dot(p.getPt(), p.getDr()) - vec3d::dot(p.getDr(), l.getPt())) / vec3d::dot(p.getDr(), l.getDr());
+			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
 			vec3d rVal = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
 			return rVal;
 		}
@@ -356,11 +356,39 @@ namespace linearMathD {//double precesion
 
 	__host__ __device__ vec3d intersectionRaw(line l, plane p) {
 			double lambda;
-			lambda = (vec3d::dot(p.getPt(), p.getDr()) - vec3d::dot(p.getDr(), l.getPt())) / vec3d::dot(p.getDr(), l.getDr());
+			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
 			vec3d rVal = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
 			return rVal;
 	}
 
+
+	__host__ __device__ bool intersectionLambda(line l, plane p, double& OUTlambda) {
+		if (vec3d::dot(l.getDr(), p.getDr()) == 0) {
+			return true;
+		}
+		else {
+			OUTlambda = vec3d::dot(p.getPt() - l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
+			return false;
+		}
+	}
+
+	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, double& OUTlambda, double defaultVal) {
+		if (vec3d::dot(l.getDr(), p.getDr()) == 0) {
+			OUTlambda = defaultVal;
+		}
+		else {
+			OUTlambda = vec3d::dot(p.getPt() - l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
+		}
+	}
+	
+	__host__ __device__ double intersectionLambdaRaw(line l, plane p) {
+			return (vec3d::dot(p.getPt() - l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr()));
+	}
+
+
+	__host__ __device__ vec3d getPt(line l, double lambda) {
+		return (l.getPt() + lambda * l.getDr());
+	}
 
 	//ray cast
 
@@ -371,7 +399,7 @@ namespace linearMathD {//double precesion
 		}
 		else {
 			double lambda;
-			lambda = (vec3d::dot(p.getPt(), p.getDr()) - vec3d::dot(p.getDr(), l.getPt())) / vec3d::dot(p.getDr(), l.getDr());
+			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
 			if (lambda < 0) {
 				intersection = l.getPt();
 				return 1;//no results
@@ -379,6 +407,7 @@ namespace linearMathD {//double precesion
 			intersection = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
 		}
 	}
+
 }
 
 
@@ -715,7 +744,7 @@ namespace linearMathF {//single precesion
 		else {
 			*error = false;//no error
 			float lambda;
-			lambda = (vec3f::dot(p.getPt(), p.getDr()) - vec3f::dot(p.getDr(), l.getPt())) / vec3f::dot(p.getDr(), l.getDr());
+			lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
 			vec3f rVal = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
 			return rVal;
 		}
@@ -727,7 +756,7 @@ namespace linearMathF {//single precesion
 		}
 		else {
 			float lambda;
-			lambda = (vec3f::dot(p.getPt(), p.getDr()) - vec3f::dot(p.getDr(), l.getPt())) / vec3f::dot(p.getDr(), l.getDr());
+			lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
 			vec3f rVal = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
 			return rVal;
 		}
@@ -735,11 +764,39 @@ namespace linearMathF {//single precesion
 
 	__host__ __device__ vec3f intersectionRaw(line l, plane p) {
 		float lambda;
-		lambda = (vec3f::dot(p.getPt(), p.getDr()) - vec3f::dot(p.getDr(), l.getPt())) / vec3f::dot(p.getDr(), l.getDr());
+		lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
 		vec3f rVal = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
 		return rVal;
 	}
 
+
+	__host__ __device__ bool intersectionLambda(line l, plane p, float& OUTlambda) {
+		if (vec3f::dot(l.getDr(), p.getDr()) == 0) {
+			return true;
+		}
+		else {
+			OUTlambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
+			return false;
+		}
+	}
+
+	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, float& OUTlambda, float defaultVal) {
+		if (vec3f::dot(l.getDr(), p.getDr()) == 0) {
+			OUTlambda = defaultVal;
+		}
+		else {
+			OUTlambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
+		}
+	}
+
+	__host__ __device__ float intersectionLambdaRaw(line l, plane p) {
+		return (vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr()));
+	}
+
+
+	__host__ __device__ vec3f getPt(line l, float lambda) {
+		return (l.getPt() + lambda * l.getDr());
+	}
 
 	//ray cast
 
@@ -750,7 +807,7 @@ namespace linearMathF {//single precesion
 		}
 		else {
 			float lambda;
-			lambda = (vec3f::dot(p.getPt(), p.getDr()) - vec3f::dot(p.getDr(), l.getPt())) / vec3f::dot(p.getDr(), l.getDr());
+			lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
 			if (lambda < 0) {
 				intersection = l.getPt();
 				return 1;//no results
@@ -758,6 +815,7 @@ namespace linearMathF {//single precesion
 			intersection = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
 		}
 	}
+
 }
 
 
@@ -1094,7 +1152,7 @@ namespace linearMathLD {//long double precesion
 		else {
 			*error = false;//no error
 			long double lambda;
-			lambda = (vec3ld::dot(p.getPt(), p.getDr()) - vec3ld::dot(p.getDr(), l.getPt())) / vec3ld::dot(p.getDr(), l.getDr());
+			lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
 			vec3ld rVal = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
 			return rVal;
 		}
@@ -1106,7 +1164,7 @@ namespace linearMathLD {//long double precesion
 		}
 		else {
 			long double lambda;
-			lambda = (vec3ld::dot(p.getPt(), p.getDr()) - vec3ld::dot(p.getDr(), l.getPt())) / vec3ld::dot(p.getDr(), l.getDr());
+			lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
 			vec3ld rVal = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
 			return rVal;
 		}
@@ -1114,11 +1172,39 @@ namespace linearMathLD {//long double precesion
 
 	__host__ __device__ vec3ld intersectionRaw(line l, plane p) {
 		long double lambda;
-		lambda = (vec3ld::dot(p.getPt(), p.getDr()) - vec3ld::dot(p.getDr(), l.getPt())) / vec3ld::dot(p.getDr(), l.getDr());
+		lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
 		vec3ld rVal = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
 		return rVal;
 	}
 
+
+	__host__ __device__ bool intersectionLambda(line l, plane p, long double& OUTlambda) {
+		if (vec3ld::dot(l.getDr(), p.getDr()) == 0) {
+			return true;
+		}
+		else {
+			OUTlambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
+			return false;
+		}
+	}
+
+	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, long double& OUTlambda, long double defaultVal) {
+		if (vec3ld::dot(l.getDr(), p.getDr()) == 0) {
+			OUTlambda = defaultVal;
+		}
+		else {
+			OUTlambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
+		}
+	}
+
+	__host__ __device__ long double intersectionLambdaRaw(line l, plane p) {
+		return (vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr()));
+	}
+
+
+	__host__ __device__ vec3ld getPt(line l, long double lambda) {
+		return (l.getPt() + lambda * l.getDr());
+	}
 
 	//ray cast
 
@@ -1129,7 +1215,7 @@ namespace linearMathLD {//long double precesion
 		}
 		else {
 			long double lambda;
-			lambda = (vec3ld::dot(p.getPt(), p.getDr()) - vec3ld::dot(p.getDr(), l.getPt())) / vec3ld::dot(p.getDr(), l.getDr());
+			lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
 			if (lambda < 0) {
 				intersection = l.getPt();
 				return 1;//no results
@@ -1137,4 +1223,5 @@ namespace linearMathLD {//long double precesion
 			intersection = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
 		}
 	}
+
 }
