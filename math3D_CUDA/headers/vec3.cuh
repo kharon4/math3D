@@ -12,37 +12,37 @@ public:
 	T x, y, z;
 	__host__ __device__ vec3();
 	__host__ __device__ vec3(T, T, T);
-	__host__ __device__ double mag();
-	__host__ __device__ double mag2();
+	__host__ __device__ double mag() const;
+	__host__ __device__ double mag2() const;
 	__host__ __device__ bool normalize();
 	__host__ __device__ void normalizeRaw();
 	__host__ __device__ void multiply(double);
 	
-	static __host__ __device__ double dot(vec3<T> a, vec3<T> b);//dot product
-	static __host__ __device__ vec3<T> cross(vec3<T> a, vec3<T> b);//cross product
-	static __host__ __device__ vec3<T> multiply(vec3<T> a, double factor);
-	static __host__ __device__ vec3<T> add(vec3<T> a, vec3<T> b);
-	static __host__ __device__ vec3<T> subtract(vec3<T> a, vec3<T> b);//a-b
+	static __host__ __device__ double dot(const vec3<T>& a, const vec3<T>& b);//dot product
+	static __host__ __device__ vec3<T> cross(const vec3<T>& a, const vec3<T>& b);//cross product
+	static __host__ __device__ vec3<T> multiply(const vec3<T>& a, const double factor);
+	static __host__ __device__ vec3<T> add(const vec3<T>& a, const vec3<T>& b);
+	static __host__ __device__ vec3<T> subtract(const vec3<T>& a, const vec3<T>& b);//a-b
 
 	
-	static __host__ __device__ double angle(vec3<T> a, vec3<T> b, errCodes* err);//in radian
-	inline static __host__ __device__ double angleRaw(vec3<T> a, vec3<T> b);//no err checking
-	static __host__ __device__ double angleRaw_s(vec3<T> a, vec3<T> b);//safe
-	static __host__ __device__ double component(vec3<T> of, vec3<T> along, errCodes* err);
-	inline static __host__ __device__ double componentRaw(vec3<T> of, vec3<T> along);//no err checking
-	static __host__ __device__ double componentRaw_s(vec3<T> of, vec3<T> along);//safe
+	static __host__ __device__ double angle(const vec3<T>& a, const vec3<T>& b, errCodes* err);//in radian
+	inline static __host__ __device__ double angleRaw(const vec3<T>& a, const vec3<T>& b);//no err checking
+	static __host__ __device__ double angleRaw_s(const vec3<T>& a, const vec3<T>& b);//safe
+	static __host__ __device__ double component(const vec3<T>& of, const vec3<T>& along, errCodes* err);
+	inline static __host__ __device__ double componentRaw(const vec3<T>& of, const vec3<T>& along);//no err checking
+	static __host__ __device__ double componentRaw_s(const vec3<T>& of, const vec3<T>& along);//safe
 	static __host__ __device__ vec3<T> normalize(vec3<T> a, errCodes* err);
 	inline static __host__ __device__ vec3<T> normalizeRaw(vec3<T> a);//no err checking
 	static __host__ __device__ vec3<T> normalizeRaw_s(vec3<T> a);//safe
 
-	static __host__ __device__ bool isNUL(vec3<T> a);
+	static __host__ __device__ bool isNUL(const vec3<T>& a);
 
-	static __host__ __device__ bool isEqual(vec3<T> a, vec3<T> b);
+	static __host__ __device__ bool isEqual(const vec3<T>& a, const vec3<T>& b);
 	
 	//dir based vectors
-	__host__ __device__ vec3<T> vecX(T val) { return vec3<T>(val, 0, 0); }
-	__host__ __device__ vec3<T> vecY(T val) { return vec3<T>(0, val, 0); }
-	__host__ __device__ vec3<T> vecZ(T val) { return vec3<T>(0, 0, val); }
+	inline static __host__ __device__ vec3<T> vecX(T val) { return vec3<T>(val, 0, 0); }
+	inline static __host__ __device__ vec3<T> vecY(T val) { return vec3<T>(0, val, 0); }
+	inline static __host__ __device__ vec3<T> vecZ(T val) { return vec3<T>(0, 0, val); }
 
 
 	template<typename N>
@@ -52,38 +52,38 @@ public:
 		z = (T)in.z;
 	}
 
-	__host__ __device__ vec3<T> operator + (vec3<T> const other)const { return add(*this, other); }
+	__host__ __device__ vec3<T> operator + (const vec3<T>& other)const { return add(*this, other); }
 
-	__host__ __device__ void operator += (vec3<T> const other) { *this = add(*this, other); }
+	__host__ __device__ void operator += (const vec3<T>& other) { *this = add(*this, other); }
 
-	__host__ __device__ vec3<T> operator - (vec3<T> const other)const { return subtract(*this, other); }
+	__host__ __device__ vec3<T> operator - (const vec3<T>& other)const { return subtract(*this, other); }
 
 	__host__ __device__ vec3<T> operator - ()const { return multiply(*this, -1); }
 
-	__host__ __device__ void operator -= (vec3<T> const other) { *this = subtract(*this, other); }
+	__host__ __device__ void operator -= (const vec3<T>& other) { *this = subtract(*this, other); }
 
-	__host__ __device__ vec3<T> operator * (double const other)const { return multiply(*this, other); }
+	__host__ __device__ vec3<T> operator * (const double& other)const { return multiply(*this, other); }
 
-	__host__ __device__ void operator *= (double const other) { *this = multiply(*this, other); }
+	__host__ __device__ void operator *= (const double& other) { *this = multiply(*this, other); }
 
-	__host__ __device__ vec3<T> operator * (vec3<T> const other)const { return cross(*this, other); }
+	__host__ __device__ vec3<T> operator * (const vec3<T>& other)const { return cross(*this, other); }
 
-	__host__ __device__ void operator *= (vec3<T> const other) { *this = cross(*this, other); }
+	__host__ __device__ void operator *= (const vec3<T>& other) { *this = cross(*this, other); }
 
-	__host__ __device__ vec3<T> operator / (double const other)const { return multiply(*this, 1 / other); }
+	__host__ __device__ vec3<T> operator / (const double& other)const { return multiply(*this, 1 / other); }
 
-	__host__ __device__ void operator /= (double const other) { *this = multiply(*this, 1 / other); }
+	__host__ __device__ void operator /= (const double& other) { *this = multiply(*this, 1 / other); }
 
-	__host__ __device__ double operator / (vec3<T> const other)const { return dot(*this, other); }
+	__host__ __device__ double operator / (const vec3<T>& other)const { return dot(*this, other); }
 
-	__host__ __device__ bool operator == (vec3<T> const other)const { return isEqual(*this, other); }
+	__host__ __device__ bool operator == (const vec3<T>& other)const { return isEqual(*this, other); }
 
-	__host__ __device__ bool operator != (vec3<T> const other)const { return !isEqual(*this, other); }
+	__host__ __device__ bool operator != (const vec3<T>& other)const { return !isEqual(*this, other); }
 
 };
 
 template <typename T>
-__host__ __device__ vec3<T> operator * (double const other, vec3<T> vec) { return vec3<T>::multiply(vec, other); }
+__host__ __device__ vec3<T> operator * (const double& other,const vec3<T>& vec) { return vec3<T>::multiply(vec, other); }
 
 
 //declaration macro
