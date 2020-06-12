@@ -4,130 +4,163 @@
 
 #include <math.h>
 
-namespace linearMathD {//double precesion
+namespace linearMath {//double precesion
 
 
 	//line class
-	__host__ __device__ line::line() {
-		setRaw(vec3d(0, 0, 0), vec3d(1, 0, 0));
+	template<typename T>
+	__host__ __device__ line<T>::line() {
+		setRaw(vec3<T>(0, 0, 0), vec3<T>(1, 0, 0));
 	}
 
-	__host__ __device__ line::line(vec3d PT, vec3d DR) {
+	template<typename T>
+	__host__ __device__ line<T>::line(const vec3<T>& PT, const vec3<T>& DR) {
 		setRaw_s(PT, DR);
 	}
 
-	__host__ __device__ bool line::set(vec3d PT, vec3d DR) {
+	template<typename T>
+	__host__ __device__ bool line<T>::set(const vec3<T>& PT, const vec3<T>& DR) {
 		pt = PT;
-		if (vec3d::isNUL(DR)) {
-			dr = vec3d(1, 0, 0);
+		if (vec3<T>::isNUL(DR)) {
+			dr = vec3<T>(1, 0, 0);
 			return true;//error
 		}
 		dr = DR;
 		return false;
 	}
 
-	__host__ __device__ void line::setRaw_s(vec3d PT, vec3d DR) {
+	template<typename T>
+	inline __host__ __device__ void line<T>::setRaw_s(const vec3<T>& PT, const vec3<T>& DR) {
 		pt = PT;
-		if (vec3d::isNUL(DR)) dr = vec3d(1, 0, 0);
+		if (vec3<T>::isNUL(DR)) dr = vec3<T>(1, 0, 0);
 		else dr = DR;
 	}
 
-	__host__ __device__ void line::setRaw(vec3d PT, vec3d DR) {
+	template<typename T>
+	inline __host__ __device__ void line<T>::setRaw(const vec3<T>& PT, const vec3<T>& DR) {
 		pt = PT;
 		dr = DR;
 	}
 
 	
-
-	__host__ __device__ void line::setPT(vec3d PT) {
+	template<typename T>
+	inline __host__ __device__ void line<T>::setPT(const vec3<T>& PT) {
 		pt = PT;
 	}
 
-	__host__ __device__ bool line::setDR(vec3d DR) {
-		if (vec3d::isNUL(DR)) {
-			dr = vec3d(1, 0, 0);
+	template<typename T>
+	__host__ __device__ bool line<T>::setDR(const vec3<T>& DR) {
+		if (vec3<T>::isNUL(DR)) {
+			dr = vec3<T>(1, 0, 0);
 			return true;//error
 		}
 		dr = DR;
 		return false;
 	}
 
-	__host__ __device__ void line::setDRRaw_s(vec3d DR) {
-		if (vec3d::isNUL(DR))dr = vec3d(1, 0, 0);
+	template<typename T>
+	inline __host__ __device__ void line<T>::setDRRaw_s(const vec3<T>& DR) {
+		if (vec3<T>::isNUL(DR))dr = vec3<T>(1, 0, 0);
 		else dr = DR;
 	}
 
-	__host__ __device__ void line::setDRRaw(vec3d DR) {
+	template<typename T>
+	inline __host__ __device__ void line<T>::setDRRaw(const vec3<T>& DR) {
 		dr = DR;
 	}
 
-	__host__ __device__ vec3d line::getPt() { return pt; }
-	__host__ __device__ vec3d line::getDr() { return dr; }
+	template<typename T>
+	inline __host__ __device__ vec3<T> line<T>::getPt() const{ return pt; }
+
+	template<typename T>
+	inline __host__ __device__ vec3<T> line<T>::getDr() const{ return dr; }
 
 	//plane class
-	__host__ __device__ plane::plane() {
-		setRaw(vec3d(0,0,0),vec3d(1,0,0));
+	template<typename T>
+	__host__ __device__ plane<T>::plane() {
+		setRaw(vec3<T>(0,0,0),vec3<T>(1,0,0));
 	}
 
-	__host__ __device__ plane::plane(vec3d PT, vec3d DR) {
+	template<typename T>
+	__host__ __device__ plane<T>::plane(const vec3<T>& PT, const vec3<T>& DR) {
 		setRaw_s(PT, DR);
 	}
 
-	__host__ __device__ bool plane::set(vec3d PT, vec3d DR) {
+	template<typename T>
+	__host__ __device__ bool plane<T>::set(const vec3<T>& PT, const vec3<T>& DR) {
 		pt = PT;
-		if (vec3d::isNUL(DR)) {
-			dr = vec3d(1, 0, 0);
+		if (vec3<T>::isNUL(DR)) {
+			dr = vec3<T>(1, 0, 0);
 			return true;//error
 		}
 		dr = DR;
 		return false;
 	}
-	__host__ __device__ void plane::setRaw_s(vec3d PT, vec3d DR) {
+
+	template<typename T>
+	inline __host__ __device__ void plane<T>::setRaw_s(const vec3<T>& PT, const vec3<T>& DR) {
 		pt = PT;
-		if (vec3d::isNUL(DR))dr = vec3d(1, 0, 0);
+		if (vec3<T>::isNUL(DR))dr = vec3<T>(1, 0, 0);
 		else dr = DR;
 	}
-	__host__ __device__ void plane::setRaw(vec3d PT, vec3d DR) {
+
+	template<typename T>
+	inline __host__ __device__ void plane<T>::setRaw(const vec3<T>& PT, const vec3<T>& DR) {
 		pt = PT;
 		dr = DR;
 	}
 
-	__host__ __device__ void plane::setPT(vec3d PT) {
+	template<typename T>
+	inline __host__ __device__ void plane<T>::setPT(const vec3<T>& PT) {
 		pt = PT;
 	}
 
-	__host__ __device__ bool plane::setDR(vec3d DR) {
-		if (vec3d::isNUL(DR)) {
-			dr = vec3d(1, 0, 0);
+	template<typename T>
+	__host__ __device__ bool plane<T>::setDR(const vec3<T>& DR) {
+		if (vec3<T>::isNUL(DR)) {
+			dr = vec3<T>(1, 0, 0);
 			return true;
 		}
 		dr = DR;
 		return false;
 	}
 
-	__host__ __device__ void plane::setDRRaw_s(vec3d DR) {
-		if (vec3d::isNUL(DR))dr = vec3d(1, 0, 0);
+	template<typename T>
+	inline __host__ __device__ void plane<T>::setDRRaw_s(const vec3<T>& DR) {
+		if (vec3<T>::isNUL(DR))dr = vec3<T>(1, 0, 0);
 		else dr = DR;
 	}
 
-	__host__ __device__ void plane::setDRRaw(vec3d DR) {
+	template<typename T>
+	inline __host__ __device__ void plane<T>::setDRRaw(const vec3<T>& DR) {
 		dr = DR;
 	}
-	__host__ __device__ vec3d plane::getPt() { return pt; }
-	__host__ __device__ vec3d plane::getDr() { return dr; }
+
+	template<typename T>
+	inline __host__ __device__ vec3<T> plane<T>::getPt() const{ return pt; }
+
+	template<typename T>
+	inline __host__ __device__ vec3<T> plane<T>::getDr() const{ return dr; }
 
 
+
+	//helper math functions
+	template<typename T> 
+	inline __host__ __device__ T absVal(T val) {
+		if (val < 0)return (val * (-1));
+		return val;
+	}
 
 	//line functions
-
-	__host__ __device__ bool getPt(line l, vec3d& coord, coordinateName coordGiven) {
+	template<typename T>
+	__host__ __device__ bool getPt(const line<T>& l, vec3<T>& coord, coordinateName coordGiven) {
 		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
 			if (l.getDr().x == 0) {
 				coord = (l.getPt());
 				return 1;//error
 			}
 			else {
-				coord = vec3d(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
+				coord = vec3<T>(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
 			}
 		}
 		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
@@ -136,7 +169,7 @@ namespace linearMathD {//double precesion
 				return 1;//error
 			}
 			else {
-				coord = vec3d(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
+				coord = vec3<T>(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
 			}
 		}
 		else {//z coordinate
@@ -145,19 +178,20 @@ namespace linearMathD {//double precesion
 				return 1;//error
 			}
 			else {
-				coord = vec3d(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
+				coord = vec3<T>(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
 			}
 		}
 		return 0;//no error
 	}
 
-	__host__ __device__ void getPtRaw_s(line l, vec3d& coord, coordinateName coordGiven) {
+	template<typename T>
+	__host__ __device__ void getPtRaw_s(const line<T>& l, vec3<T>& coord, coordinateName coordGiven) {
 		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
 			if (l.getDr().x == 0) {
 				coord = (l.getPt());
 			}
 			else {
-				coord = vec3d(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
+				coord = vec3<T>(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
 			}
 		}
 		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
@@ -165,7 +199,7 @@ namespace linearMathD {//double precesion
 				coord = (l.getPt());
 			}
 			else {
-				coord = vec3d(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
+				coord = vec3<T>(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
 			}
 		}
 		else {//z coordinate
@@ -173,32 +207,34 @@ namespace linearMathD {//double precesion
 				coord = (l.getPt());
 			}
 			else {
-				coord = vec3d(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
+				coord = vec3<T>(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
 			}
 		}
 	}
 
-	__host__ __device__ void getPtRaw(line l, vec3d& coord, coordinateName coordGiven) {
+	template<typename T>
+	__host__ __device__ void getPtRaw(const line<T>& l, vec3<T>& coord, coordinateName coordGiven) {
 		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
-				coord = vec3d(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
+				coord = vec3<T>(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
 		}
 		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
-				coord = vec3d(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
+				coord = vec3<T>(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
 		}
 		else {//z coordinate
-			coord = vec3d(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
+			coord = vec3<T>(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
 		}
 	}
 
-	__host__ __device__ char getPtIn(vec3d start, vec3d end, vec3d& coord, coordinateName coordGiven) {
+	template<typename T>
+	__host__ __device__ char getPtIn(const vec3<T>& start, const vec3<T>& end, vec3<T>& coord, coordinateName coordGiven) {
 		char rval = 0;//no error
-		if (getPt(line(start, vec3d::subtract(end, start)), coord, coordGiven)) {
+		if (getPt(line<T>(start, vec3<T>::subtract(end, start)), coord, coordGiven)) {
 			rval = 1;// zero / infinite ans
 		}
 		else
 		{
-			double ttlDist = vec3d::subtract(start, end).mag2();
-			if (!(vec3d::subtract(coord, start).mag2() <= ttlDist) || !(vec3d::subtract(coord, end).mag2() <= ttlDist)) {
+			double ttlDist = vec3<T>::subtract(start, end).mag2();
+			if (!(vec3<T>::subtract(coord, start).mag2() <= ttlDist) || !(vec3<T>::subtract(coord, end).mag2() <= ttlDist)) {
 				rval = 2; // out of bounds
 			}
 		}
@@ -207,14 +243,14 @@ namespace linearMathD {//double precesion
 
 
 	//plane functions
-
-	__host__ __device__ bool getPt(plane p, vec3d& coord, coordinateName coordToFind) {
+	template<typename T>
+	__host__ __device__ bool getPt(const plane<T>& p, vec3<T>& coord, coordinateName coordToFind) {
 		if (coordToFind == coordinateName::zCoordinate) {
 			if (p.getDr().z == 0) {
 				return 1;
 			}
 			else {
-				(coord).z = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
+				(coord).z = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
 				return 0;
 			}
 		}
@@ -223,7 +259,7 @@ namespace linearMathD {//double precesion
 				return 1;
 			}
 			else {
-				(coord).x = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
+				(coord).x = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
 				return 0;
 			}
 		}
@@ -232,70 +268,73 @@ namespace linearMathD {//double precesion
 				return 1;
 			}
 			else {
-				(coord).y = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
+				(coord).y = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
 				return 0;
 			}
 		}
 	}
 
-	__host__ __device__ void getPtRaw_s(plane p, vec3d& coord, coordinateName coordToFind) {
+	template<typename T>
+	__host__ __device__ void getPtRaw_s(const plane<T>& p, vec3<T>& coord, coordinateName coordToFind) {
 		if (coordToFind == coordinateName::zCoordinate) {
 			if (p.getDr().z != 0)
-				(coord).z = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
+				(coord).z = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
 		}
 		else if (coordToFind == coordinateName::xCoordinate) {
 			if (p.getDr().x != 0)
-				(coord).x = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
+				(coord).x = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
 		}
 		else {
 			if (p.getDr().y == 0)
-				(coord).y = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
+				(coord).y = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
 		}
 	}
 
-	__host__ __device__ void getPtRaw(plane p, vec3d& coord, coordinateName coordToFind) {
+	template<typename T>
+	__host__ __device__ void getPtRaw(const plane<T>& p, vec3<T>& coord, coordinateName coordToFind) {
 		if (coordToFind == coordinateName::zCoordinate)
-				(coord).z = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
+				(coord).z = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
 		else if (coordToFind == coordinateName::xCoordinate)
-				(coord).x = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
+				(coord).x = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
 		else
-				(coord).y = (vec3d::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
+				(coord).y = (vec3<T>::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
 	}
 
 
 	//point to point functions
-
-	__host__ __device__ double distance(vec3d p1, vec3d p2) {
-		return vec3d::subtract(p1, p2).mag();
+	template<typename T>
+	__host__ __device__ double distance(const vec3<T>& p1, const vec3<T>& p2) {
+		return vec3<T>::subtract(p1, p2).mag();
 	}
 
 
 	//point and line functions
-
-	__host__ __device__ double distance(vec3d p, line l) {
-		return vec3d::cross(l.getDr(), vec3d::subtract(p, l.getPt())).mag() / l.getDr().mag();
+	template<typename T>
+	__host__ __device__ double distance(const vec3<T>& p, const line<T>& l) {
+		return vec3<T>::cross(l.getDr(), vec3<T>::subtract(p, l.getPt())).mag() / l.getDr().mag();
 	}
 
 
 	//point and plane functions
-
-	__host__ __device__ double aDistance(vec3d pt, plane p) { // algebraic distance
-		return (vec3d::dot(pt, p.getDr()) - vec3d::dot(p.getDr(), p.getPt())) / p.getDr().mag();
+	template<typename T>
+	__host__ __device__ double aDistance(const vec3<T>& pt, const plane<T>& p) { // algebraic distance
+		return (vec3<T>::dot(pt, p.getDr()) - vec3<T>::dot(p.getDr(), p.getPt())) / p.getDr().mag();
 	}
 
-	__host__ __device__ vec3d getMirrorImage(vec3d pt, plane pl) {
+	template<typename T>
+	__host__ __device__ vec3<T> getMirrorImage(const vec3<T>& pt, const plane<T>& pl) {
 		//get component perpendicular to pl
-		double Component = vec3d::componentRaw_s(vec3d::subtract(pt, pl.getPt()), pl.getDr());
-		vec3d normal = pl.getDr();
+		double Component = vec3<T>::componentRaw_s(vec3<T>::subtract(pt, pl.getPt()), pl.getDr());
+		vec3<T> normal = pl.getDr();
 		normal.normalize();
-		return (vec3d::subtract(pt, vec3d::multiply(normal, 2 * Component)));
+		return (vec3<T>::subtract(pt, vec3<T>::multiply(normal, 2 * Component)));
 	}
 
 
 	//line and line functions
-
-	__host__ __device__ bool coplanar(line l, line m) {
-		if (vec3d::dot(vec3d::subtract(l.getPt(), m.getPt()), vec3d::cross(l.getDr(), m.getDr())) == 0) {
+	template<typename T>
+	__host__ __device__ bool coplanar(const line<T>& l, const line<T>& m) {
+		if (vec3<T>::dot(vec3<T>::subtract(l.getPt(), m.getPt()), vec3<T>::cross(l.getDr(), m.getDr())) == 0) {
 			return 1;
 		}
 		else {
@@ -303,22 +342,24 @@ namespace linearMathD {//double precesion
 		}
 	}
 
-	__host__ __device__ double distance(line l, line m) {
-		if (vec3d::isEqual(l.getDr(), m.getDr())) {
-			return (vec3d::cross(vec3d::subtract(l.getPt(), m.getPt()), l.getDr()).mag() / l.getDr().mag());
+	template<typename T>
+	__host__ __device__ double distance(const line<T>& l, const line<T>& m) {
+		if (vec3<T>::isEqual(l.getDr(), m.getDr())) {
+			return (vec3<T>::cross(vec3<T>::subtract(l.getPt(), m.getPt()), l.getDr()).mag() / l.getDr().mag());
 		}
 		else {
-			vec3d temp = vec3d::cross(l.getDr(), m.getDr());
-			return fabs(vec3d::dot(vec3d::subtract(l.getPt(), m.getPt()), temp) / temp.mag());
+			vec3<T> temp = vec3<T>::cross(l.getDr(), m.getDr());
+			//replacing fabs with absVal
+			return absVal(vec3<T>::dot(vec3<T>::subtract(l.getPt(), m.getPt()), temp) / temp.mag());
 		}
 	}
 
 
 	//plane plane functions
-
-	__host__ __device__ double distance(plane p1, plane p2) {
-		if (vec3d::isEqual(p1.getDr(), p2.getDr())) {
-			return fabs((vec3d::dot(p1.getDr(), p1.getPt()) - vec3d::dot(p2.getDr(), p2.getPt())) / p1.getDr().mag());
+	template<typename T>
+	__host__ __device__ double distance(const plane<T>& p1, const plane<T>& p2) {
+		if (vec3<T>::isEqual(p1.getDr(), p2.getDr())) {
+			return absVal((vec3<T>::dot(p1.getDr(), p1.getPt()) - vec3<T>::dot(p2.getDr(), p2.getPt())) / p1.getDr().mag());
 		}
 		else {
 			return 0;
@@ -327,900 +368,88 @@ namespace linearMathD {//double precesion
 
 
 	//line and plane functions
-
-	__host__ __device__ vec3d intersection(line l, plane p, bool* error) {
-		if (vec3d::dot(l.getDr(), p.getDr()) == 0) {
+	template<typename T>
+	__host__ __device__ vec3<T> intersection(const line<T>& l, const plane<T>& p, bool* error) {
+		if (vec3<T>::dot(l.getDr(), p.getDr()) == 0) {
 			*error = true;//error , no solution of infinite solutions
 			return l.getPt();
 		}
 		else {
 			*error = false;//no error
 			double lambda;
-			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
-			vec3d rVal = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
+			lambda = vec3<T>::dot(p.getPt()-l.getPt(), p.getDr()) / vec3<T>::dot(p.getDr(), l.getDr());
+			vec3<T> rVal = vec3<T>::add(l.getPt(), vec3<T>::multiply(l.getDr(), lambda));
 			return rVal;
 		}
 	}
 
-	__host__ __device__ vec3d intersectionRaw_s(line l, plane p) {
-		if (vec3d::dot(l.getDr(), p.getDr()) == 0) {
+	template<typename T>
+	__host__ __device__ vec3<T> intersectionRaw_s(const line<T>& l, const plane<T>& p) {
+		if (vec3<T>::dot(l.getDr(), p.getDr()) == 0) {
 			return l.getPt();
 		}
 		else {
 			double lambda;
-			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
-			vec3d rVal = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
+			lambda = vec3<T>::dot(p.getPt()-l.getPt(), p.getDr()) / vec3<T>::dot(p.getDr(), l.getDr());
+			vec3<T> rVal = vec3<T>::add(l.getPt(), vec3<T>::multiply(l.getDr(), lambda));
 			return rVal;
 		}
 	}
 
-	__host__ __device__ vec3d intersectionRaw(line l, plane p) {
+	template<typename T>
+	__host__ __device__ vec3<T> intersectionRaw(const line<T>& l, const plane<T>& p) {
 			double lambda;
-			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
-			vec3d rVal = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
+			lambda = vec3<T>::dot(p.getPt()-l.getPt(), p.getDr()) / vec3<T>::dot(p.getDr(), l.getDr());
+			vec3<T> rVal = vec3<T>::add(l.getPt(), vec3<T>::multiply(l.getDr(), lambda));
 			return rVal;
 	}
 
-
-	__host__ __device__ bool intersectionLambda(line l, plane p, double& OUTlambda) {
-		if (vec3d::dot(l.getDr(), p.getDr()) == 0) {
+	template<typename T>
+	__host__ __device__ bool intersectionLambda(const line<T>& l, const plane<T>& p, double& OUTlambda) {
+		if (vec3<T>::dot(l.getDr(), p.getDr()) == 0) {
 			return true;
 		}
 		else {
-			OUTlambda = vec3d::dot(p.getPt() - l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
+			OUTlambda = vec3<T>::dot(p.getPt() - l.getPt(), p.getDr()) / vec3<T>::dot(p.getDr(), l.getDr());
 			return false;
 		}
 	}
 
-	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, double& OUTlambda, double defaultVal) {
-		if (vec3d::dot(l.getDr(), p.getDr()) == 0) {
+	template<typename T>
+	__host__ __device__ void intersectionLambdaRaw_s(const line<T>& l, const plane<T>& p, double& OUTlambda, double defaultVal) {
+		if (vec3<T>::dot(l.getDr(), p.getDr()) == 0) {
 			OUTlambda = defaultVal;
 		}
 		else {
-			OUTlambda = vec3d::dot(p.getPt() - l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
+			OUTlambda = vec3<T>::dot(p.getPt() - l.getPt(), p.getDr()) / vec3<T>::dot(p.getDr(), l.getDr());
 		}
 	}
 	
-	__host__ __device__ double intersectionLambdaRaw(line l, plane p) {
-			return (vec3d::dot(p.getPt() - l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr()));
+	template<typename T>
+	__host__ __device__ double intersectionLambdaRaw(const line<T>& l, const plane<T>& p) {
+			return (vec3<T>::dot(p.getPt() - l.getPt(), p.getDr()) / vec3<T>::dot(p.getDr(), l.getDr()));
 	}
 
-
-	__host__ __device__ vec3d getPt(line l, double lambda) {
+	template<typename T>
+	__host__ __device__ vec3<T> getPt(const line<T>& l, double lambda) {
 		return (l.getPt() + lambda * l.getDr());
 	}
 
 	//ray cast
-
-	__host__ __device__ bool rayCast(line l, plane p, vec3d& intersection) {
-		if (vec3d::dot(l.getDr(), p.getDr()) == 0) {
+	template<typename T>
+	__host__ __device__ bool rayCast(const line<T>& l, const plane<T>& p, vec3<T>& intersection) {
+		if (vec3<T>::dot(l.getDr(), p.getDr()) == 0) {
 			intersection = l.getPt();
 			return 1;// multiple or no results
 		}
 		else {
 			double lambda;
-			lambda = vec3d::dot(p.getPt()-l.getPt(), p.getDr()) / vec3d::dot(p.getDr(), l.getDr());
+			lambda = vec3<T>::dot(p.getPt()-l.getPt(), p.getDr()) / vec3<T>::dot(p.getDr(), l.getDr());
 			if (lambda < 0) {
 				intersection = l.getPt();
 				return 1;//no results
 			}
-			intersection = vec3d::add(l.getPt(), vec3d::multiply(l.getDr(), lambda));
-		}
-	}
-
-}
-
-
-
-namespace linearMathF {//single precesion
-
-
-	//line class
-	__host__ __device__ line::line() {
-		setRaw(vec3f(0, 0, 0), vec3f(1, 0, 0));
-	}
-
-	__host__ __device__ line::line(vec3f PT, vec3f DR) {
-		setRaw_s(PT, DR);
-	}
-
-	__host__ __device__ bool line::set(vec3f PT, vec3f DR) {
-		pt = PT;
-		if (vec3f::isNUL(DR)) {
-			dr = vec3f(1, 0, 0);
-			return true;//error
-		}
-		dr = DR;
-		return false;
-	}
-
-	__host__ __device__ void line::setRaw_s(vec3f PT, vec3f DR) {
-		pt = PT;
-		if (vec3f::isNUL(DR)) dr = vec3f(1, 0, 0);
-		else dr = DR;
-	}
-
-	__host__ __device__ void line::setRaw(vec3f PT, vec3f DR) {
-		pt = PT;
-		dr = DR;
-	}
-
-
-
-	__host__ __device__ void line::setPT(vec3f PT) {
-		pt = PT;
-	}
-
-	__host__ __device__ bool line::setDR(vec3f DR) {
-		if (vec3f::isNUL(DR)) {
-			dr = vec3f(1, 0, 0);
-			return true;//error
-		}
-		dr = DR;
-		return false;
-	}
-
-	__host__ __device__ void line::setDRRaw_s(vec3f DR) {
-		if (vec3f::isNUL(DR))dr = vec3f(1, 0, 0);
-		else dr = DR;
-	}
-
-	__host__ __device__ void line::setDRRaw(vec3f DR) {
-		dr = DR;
-	}
-
-	__host__ __device__ vec3f line::getPt() { return pt; }
-	__host__ __device__ vec3f line::getDr() { return dr; }
-
-	//plane class
-	__host__ __device__ plane::plane() {
-		setRaw(vec3f(0, 0, 0), vec3f(1, 0, 0));
-	}
-
-	__host__ __device__ plane::plane(vec3f PT, vec3f DR) {
-		setRaw_s(PT, DR);
-	}
-
-	__host__ __device__ bool plane::set(vec3f PT, vec3f DR) {
-		pt = PT;
-		if (vec3f::isNUL(DR)) {
-			dr = vec3f(1, 0, 0);
-			return true;//error
-		}
-		dr = DR;
-		return false;
-	}
-	__host__ __device__ void plane::setRaw_s(vec3f PT, vec3f DR) {
-		pt = PT;
-		if (vec3f::isNUL(DR))dr = vec3f(1, 0, 0);
-		else dr = DR;
-	}
-	__host__ __device__ void plane::setRaw(vec3f PT, vec3f DR) {
-		pt = PT;
-		dr = DR;
-	}
-
-	__host__ __device__ void plane::setPT(vec3f PT) {
-		pt = PT;
-	}
-
-	__host__ __device__ bool plane::setDR(vec3f DR) {
-		if (vec3f::isNUL(DR)) {
-			dr = vec3f(1, 0, 0);
-			return true;
-		}
-		dr = DR;
-		return false;
-	}
-
-	__host__ __device__ void plane::setDRRaw_s(vec3f DR) {
-		if (vec3f::isNUL(DR))dr = vec3f(1, 0, 0);
-		else dr = DR;
-	}
-
-	__host__ __device__ void plane::setDRRaw(vec3f DR) {
-		dr = DR;
-	}
-	__host__ __device__ vec3f plane::getPt() { return pt; }
-	__host__ __device__ vec3f plane::getDr() { return dr; }
-
-
-
-	//line functions
-
-	__host__ __device__ bool getPt(line l, vec3f& coord, coordinateName coordGiven) {
-		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
-			if (l.getDr().x == 0) {
-				coord = (l.getPt());
-				return 1;//error
-			}
-			else {
-				coord = vec3f(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
-			}
-		}
-		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
-			if (l.getDr().y == 0) {
-				coord = (l.getPt());
-				return 1;//error
-			}
-			else {
-				coord = vec3f(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
-			}
-		}
-		else {//z coordinate
-			if (l.getDr().z == 0) {
-				coord = (l.getPt());
-				return 1;//error
-			}
-			else {
-				coord = vec3f(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
-			}
-		}
-		return 0;//no error
-	}
-
-	__host__ __device__ void getPtRaw_s(line l, vec3f& coord, coordinateName coordGiven) {
-		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
-			if (l.getDr().x == 0) {
-				coord = (l.getPt());
-			}
-			else {
-				coord = vec3f(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
-			}
-		}
-		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
-			if (l.getDr().y == 0) {
-				coord = (l.getPt());
-			}
-			else {
-				coord = vec3f(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
-			}
-		}
-		else {//z coordinate
-			if (l.getDr().z == 0) {
-				coord = (l.getPt());
-			}
-			else {
-				coord = vec3f(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
-			}
-		}
-	}
-
-	__host__ __device__ void getPtRaw(line l, vec3f& coord, coordinateName coordGiven) {
-		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
-			coord = vec3f(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
-		}
-		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
-			coord = vec3f(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
-		}
-		else {//z coordinate
-			coord = vec3f(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
-		}
-	}
-
-	__host__ __device__ char getPtIn(vec3f start, vec3f end, vec3f& coord, coordinateName coordGiven) {
-		char rval = 0;//no error
-		if (getPt(line(start, vec3f::subtract(end, start)), coord, coordGiven)) {
-			rval = 1;// zero / infinite ans
-		}
-		else
-		{
-			float ttlDist = vec3f::subtract(start, end).mag2();
-			if (!(vec3f::subtract(coord, start).mag2() <= ttlDist) || !(vec3f::subtract(coord, end).mag2() <= ttlDist)) {
-				rval = 2; // out of bounds
-			}
-		}
-		return rval;
-	}
-
-
-	//plane functions
-
-	__host__ __device__ bool getPt(plane p, vec3f& coord, coordinateName coordToFind) {
-		if (coordToFind == coordinateName::zCoordinate) {
-			if (p.getDr().z == 0) {
-				return 1;
-			}
-			else {
-				(coord).z = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
-				return 0;
-			}
-		}
-		else if (coordToFind == coordinateName::xCoordinate) {
-			if (p.getDr().x == 0) {
-				return 1;
-			}
-			else {
-				(coord).x = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
-				return 0;
-			}
-		}
-		else {
-			if (p.getDr().y == 0) {
-				return 1;
-			}
-			else {
-				(coord).y = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
-				return 0;
-			}
-		}
-	}
-
-	__host__ __device__ void getPtRaw_s(plane p, vec3f& coord, coordinateName coordToFind) {
-		if (coordToFind == coordinateName::zCoordinate) {
-			if (p.getDr().z != 0)
-				(coord).z = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
-		}
-		else if (coordToFind == coordinateName::xCoordinate) {
-			if (p.getDr().x != 0)
-				(coord).x = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
-		}
-		else {
-			if (p.getDr().y == 0)
-				(coord).y = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
-		}
-	}
-
-	__host__ __device__ void getPtRaw(plane p, vec3f& coord, coordinateName coordToFind) {
-		if (coordToFind == coordinateName::zCoordinate)
-			(coord).z = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
-		else if (coordToFind == coordinateName::xCoordinate)
-			(coord).x = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
-		else
-			(coord).y = (vec3f::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
-	}
-
-
-	//point to point functions
-
-	__host__ __device__ float distance(vec3f p1, vec3f p2) {
-		return vec3f::subtract(p1, p2).mag();
-	}
-
-
-	//point and line functions
-
-	__host__ __device__ float distance(vec3f p, line l) {
-		return vec3f::cross(l.getDr(), vec3f::subtract(p, l.getPt())).mag() / l.getDr().mag();
-	}
-
-
-	//point and plane functions
-
-	__host__ __device__ float aDistance(vec3f pt, plane p) { // algebraic distance
-		return (vec3f::dot(pt, p.getDr()) - vec3f::dot(p.getDr(), p.getPt())) / p.getDr().mag();
-	}
-
-	__host__ __device__ vec3f getMirrorImage(vec3f pt, plane pl) {
-		//get component perpendicular to pl
-		float Component = vec3f::componentRaw_s(vec3f::subtract(pt, pl.getPt()), pl.getDr());
-		vec3f normal = pl.getDr();
-		normal.normalize();
-		return (vec3f::subtract(pt, vec3f::multiply(normal, 2 * Component)));
-	}
-
-
-	//line and line functions
-
-	__host__ __device__ bool coplanar(line l, line m) {
-		if (vec3f::dot(vec3f::subtract(l.getPt(), m.getPt()), vec3f::cross(l.getDr(), m.getDr())) == 0) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	__host__ __device__ float distance(line l, line m) {
-		if (vec3f::isEqual(l.getDr(), m.getDr())) {
-			return (vec3f::cross(vec3f::subtract(l.getPt(), m.getPt()), l.getDr()).mag() / l.getDr().mag());
-		}
-		else {
-			vec3f temp = vec3f::cross(l.getDr(), m.getDr());
-			return fabs(vec3f::dot(vec3f::subtract(l.getPt(), m.getPt()), temp) / temp.mag());
-		}
-	}
-
-
-	//plane plane functions
-
-	__host__ __device__ float distance(plane p1, plane p2) {
-		if (vec3f::isEqual(p1.getDr(), p2.getDr())) {
-			return fabs((vec3f::dot(p1.getDr(), p1.getPt()) - vec3f::dot(p2.getDr(), p2.getPt())) / p1.getDr().mag());
-		}
-		else {
-			return 0;
-		}
-	}
-
-
-	//line and plane functions
-
-	__host__ __device__ vec3f intersection(line l, plane p, bool* error) {
-		if (vec3f::dot(l.getDr(), p.getDr()) == 0) {
-			*error = true;//error , no solution of infinite solutions
-			return l.getPt();
-		}
-		else {
-			*error = false;//no error
-			float lambda;
-			lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
-			vec3f rVal = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
-			return rVal;
-		}
-	}
-
-	__host__ __device__ vec3f intersectionRaw_s(line l, plane p) {
-		if (vec3f::dot(l.getDr(), p.getDr()) == 0) {
-			return l.getPt();
-		}
-		else {
-			float lambda;
-			lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
-			vec3f rVal = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
-			return rVal;
-		}
-	}
-
-	__host__ __device__ vec3f intersectionRaw(line l, plane p) {
-		float lambda;
-		lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
-		vec3f rVal = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
-		return rVal;
-	}
-
-
-	__host__ __device__ bool intersectionLambda(line l, plane p, float& OUTlambda) {
-		if (vec3f::dot(l.getDr(), p.getDr()) == 0) {
-			return true;
-		}
-		else {
-			OUTlambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
-			return false;
-		}
-	}
-
-	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, float& OUTlambda, float defaultVal) {
-		if (vec3f::dot(l.getDr(), p.getDr()) == 0) {
-			OUTlambda = defaultVal;
-		}
-		else {
-			OUTlambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
-		}
-	}
-
-	__host__ __device__ float intersectionLambdaRaw(line l, plane p) {
-		return (vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr()));
-	}
-
-
-	__host__ __device__ vec3f getPt(line l, float lambda) {
-		return (l.getPt() + lambda * l.getDr());
-	}
-
-	//ray cast
-
-	__host__ __device__ bool rayCast(line l, plane p, vec3f& intersection) {
-		if (vec3f::dot(l.getDr(), p.getDr()) == 0) {
-			intersection = l.getPt();
-			return 1;// multiple or no results
-		}
-		else {
-			float lambda;
-			lambda = vec3f::dot(p.getPt() - l.getPt(), p.getDr()) / vec3f::dot(p.getDr(), l.getDr());
-			if (lambda < 0) {
-				intersection = l.getPt();
-				return 1;//no results
-			}
-			intersection = vec3f::add(l.getPt(), vec3f::multiply(l.getDr(), lambda));
-		}
-	}
-
-}
-
-
-
-namespace linearMathLD {//long double precesion
-
-
-	//line class
-	__host__ __device__ line::line() {
-		setRaw(vec3ld(0, 0, 0), vec3ld(1, 0, 0));
-	}
-
-	__host__ __device__ line::line(vec3ld PT, vec3ld DR) {
-		setRaw_s(PT, DR);
-	}
-
-	__host__ __device__ bool line::set(vec3ld PT, vec3ld DR) {
-		pt = PT;
-		if (vec3ld::isNUL(DR)) {
-			dr = vec3ld(1, 0, 0);
-			return true;//error
-		}
-		dr = DR;
-		return false;
-	}
-
-	__host__ __device__ void line::setRaw_s(vec3ld PT, vec3ld DR) {
-		pt = PT;
-		if (vec3ld::isNUL(DR)) dr = vec3ld(1, 0, 0);
-		else dr = DR;
-	}
-
-	__host__ __device__ void line::setRaw(vec3ld PT, vec3ld DR) {
-		pt = PT;
-		dr = DR;
-	}
-
-
-
-	__host__ __device__ void line::setPT(vec3ld PT) {
-		pt = PT;
-	}
-
-	__host__ __device__ bool line::setDR(vec3ld DR) {
-		if (vec3ld::isNUL(DR)) {
-			dr = vec3ld(1, 0, 0);
-			return true;//error
-		}
-		dr = DR;
-		return false;
-	}
-
-	__host__ __device__ void line::setDRRaw_s(vec3ld DR) {
-		if (vec3ld::isNUL(DR))dr = vec3ld(1, 0, 0);
-		else dr = DR;
-	}
-
-	__host__ __device__ void line::setDRRaw(vec3ld DR) {
-		dr = DR;
-	}
-
-	__host__ __device__ vec3ld line::getPt() { return pt; }
-	__host__ __device__ vec3ld line::getDr() { return dr; }
-
-	//plane class
-	__host__ __device__ plane::plane() {
-		setRaw(vec3ld(0, 0, 0), vec3ld(1, 0, 0));
-	}
-
-	__host__ __device__ plane::plane(vec3ld PT, vec3ld DR) {
-		setRaw_s(PT, DR);
-	}
-
-	__host__ __device__ bool plane::set(vec3ld PT, vec3ld DR) {
-		pt = PT;
-		if (vec3ld::isNUL(DR)) {
-			dr = vec3ld(1, 0, 0);
-			return true;//error
-		}
-		dr = DR;
-		return false;
-	}
-	__host__ __device__ void plane::setRaw_s(vec3ld PT, vec3ld DR) {
-		pt = PT;
-		if (vec3ld::isNUL(DR))dr = vec3ld(1, 0, 0);
-		else dr = DR;
-	}
-	__host__ __device__ void plane::setRaw(vec3ld PT, vec3ld DR) {
-		pt = PT;
-		dr = DR;
-	}
-
-	__host__ __device__ void plane::setPT(vec3ld PT) {
-		pt = PT;
-	}
-
-	__host__ __device__ bool plane::setDR(vec3ld DR) {
-		if (vec3ld::isNUL(DR)) {
-			dr = vec3ld(1, 0, 0);
-			return true;
-		}
-		dr = DR;
-		return false;
-	}
-
-	__host__ __device__ void plane::setDRRaw_s(vec3ld DR) {
-		if (vec3ld::isNUL(DR))dr = vec3ld(1, 0, 0);
-		else dr = DR;
-	}
-
-	__host__ __device__ void plane::setDRRaw(vec3ld DR) {
-		dr = DR;
-	}
-	__host__ __device__ vec3ld plane::getPt() { return pt; }
-	__host__ __device__ vec3ld plane::getDr() { return dr; }
-
-
-
-	//line functions
-
-	__host__ __device__ bool getPt(line l, vec3ld& coord, coordinateName coordGiven) {
-		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
-			if (l.getDr().x == 0) {
-				coord = (l.getPt());
-				return 1;//error
-			}
-			else {
-				coord = vec3ld(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
-			}
-		}
-		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
-			if (l.getDr().y == 0) {
-				coord = (l.getPt());
-				return 1;//error
-			}
-			else {
-				coord = vec3ld(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
-			}
-		}
-		else {//z coordinate
-			if (l.getDr().z == 0) {
-				coord = (l.getPt());
-				return 1;//error
-			}
-			else {
-				coord = vec3ld(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
-			}
-		}
-		return 0;//no error
-	}
-
-	__host__ __device__ void getPtRaw_s(line l, vec3ld& coord, coordinateName coordGiven) {
-		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
-			if (l.getDr().x == 0) {
-				coord = (l.getPt());
-			}
-			else {
-				coord = vec3ld(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
-			}
-		}
-		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
-			if (l.getDr().y == 0) {
-				coord = (l.getPt());
-			}
-			else {
-				coord = vec3ld(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
-			}
-		}
-		else {//z coordinate
-			if (l.getDr().z == 0) {
-				coord = (l.getPt());
-			}
-			else {
-				coord = vec3ld(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
-			}
-		}
-	}
-
-	__host__ __device__ void getPtRaw(line l, vec3ld& coord, coordinateName coordGiven) {
-		if (coordGiven == coordinateName::xCoordinate) {//coord is x coord
-			coord = vec3ld(coord.x, l.getPt().y + l.getDr().y * (coord.x - l.getPt().x) / l.getDr().x, l.getPt().z + l.getDr().z * (coord.x - l.getPt().x) / l.getDr().x);
-		}
-		else if (coordGiven == coordinateName::yCoordinate) {//coord is y coord
-			coord = vec3ld(l.getPt().x + l.getDr().x * (coord.y - l.getPt().y) / l.getDr().y, coord.y, l.getPt().z + l.getDr().z * (coord.y - l.getPt().y) / l.getDr().y);
-		}
-		else {//z coordinate
-			coord = vec3ld(l.getPt().x + l.getDr().x * (coord.z - l.getPt().z) / l.getDr().z, l.getPt().y + l.getDr().y * (coord.z - l.getPt().z) / l.getDr().z, coord.z);
-		}
-	}
-
-	__host__ __device__ char getPtIn(vec3ld start, vec3ld end, vec3ld& coord, coordinateName coordGiven) {
-		char rval = 0;//no error
-		if (getPt(line(start, vec3ld::subtract(end, start)), coord, coordGiven)) {
-			rval = 1;// zero / infinite ans
-		}
-		else
-		{
-			long double ttlDist = vec3ld::subtract(start, end).mag2();
-			if (!(vec3ld::subtract(coord, start).mag2() <= ttlDist) || !(vec3ld::subtract(coord, end).mag2() <= ttlDist)) {
-				rval = 2; // out of bounds
-			}
-		}
-		return rval;
-	}
-
-
-	//plane functions
-
-	__host__ __device__ bool getPt(plane p, vec3ld& coord, coordinateName coordToFind) {
-		if (coordToFind == coordinateName::zCoordinate) {
-			if (p.getDr().z == 0) {
-				return 1;
-			}
-			else {
-				(coord).z = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
-				return 0;
-			}
-		}
-		else if (coordToFind == coordinateName::xCoordinate) {
-			if (p.getDr().x == 0) {
-				return 1;
-			}
-			else {
-				(coord).x = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
-				return 0;
-			}
-		}
-		else {
-			if (p.getDr().y == 0) {
-				return 1;
-			}
-			else {
-				(coord).y = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
-				return 0;
-			}
-		}
-	}
-
-	__host__ __device__ void getPtRaw_s(plane p, vec3ld& coord, coordinateName coordToFind) {
-		if (coordToFind == coordinateName::zCoordinate) {
-			if (p.getDr().z != 0)
-				(coord).z = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
-		}
-		else if (coordToFind == coordinateName::xCoordinate) {
-			if (p.getDr().x != 0)
-				(coord).x = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
-		}
-		else {
-			if (p.getDr().y == 0)
-				(coord).y = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
-		}
-	}
-
-	__host__ __device__ void getPtRaw(plane p, vec3ld& coord, coordinateName coordToFind) {
-		if (coordToFind == coordinateName::zCoordinate)
-			(coord).z = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().y * (coord).y)) / p.getDr().z;
-		else if (coordToFind == coordinateName::xCoordinate)
-			(coord).x = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().z * (coord).z + p.getDr().y * (coord).y)) / p.getDr().x;
-		else
-			(coord).y = (vec3ld::dot(p.getPt(), p.getDr()) - (p.getDr().x * (coord).x + p.getDr().z * (coord).z)) / p.getDr().y;
-	}
-
-
-	//point to point functions
-
-	__host__ __device__ long double distance(vec3ld p1, vec3ld p2) {
-		return vec3ld::subtract(p1, p2).mag();
-	}
-
-
-	//point and line functions
-
-	__host__ __device__ long double distance(vec3ld p, line l) {
-		return vec3ld::cross(l.getDr(), vec3ld::subtract(p, l.getPt())).mag() / l.getDr().mag();
-	}
-
-
-	//point and plane functions
-
-	__host__ __device__ long double aDistance(vec3ld pt, plane p) { // algebraic distance
-		return (vec3ld::dot(pt, p.getDr()) - vec3ld::dot(p.getDr(), p.getPt())) / p.getDr().mag();
-	}
-
-	__host__ __device__ vec3ld getMirrorImage(vec3ld pt, plane pl) {
-		//get component perpendicular to pl
-		long double Component = vec3ld::componentRaw_s(vec3ld::subtract(pt, pl.getPt()), pl.getDr());
-		vec3ld normal = pl.getDr();
-		normal.normalize();
-		return (vec3ld::subtract(pt, vec3ld::multiply(normal, 2 * Component)));
-	}
-
-
-	//line and line functions
-
-	__host__ __device__ bool coplanar(line l, line m) {
-		if (vec3ld::dot(vec3ld::subtract(l.getPt(), m.getPt()), vec3ld::cross(l.getDr(), m.getDr())) == 0) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	__host__ __device__ long double distance(line l, line m) {
-		if (vec3ld::isEqual(l.getDr(), m.getDr())) {
-			return (vec3ld::cross(vec3ld::subtract(l.getPt(), m.getPt()), l.getDr()).mag() / l.getDr().mag());
-		}
-		else {
-			vec3ld temp = vec3ld::cross(l.getDr(), m.getDr());
-			return fabs(vec3ld::dot(vec3ld::subtract(l.getPt(), m.getPt()), temp) / temp.mag());
-		}
-	}
-
-
-	//plane plane functions
-
-	__host__ __device__ long double distance(plane p1, plane p2) {
-		if (vec3ld::isEqual(p1.getDr(), p2.getDr())) {
-			return fabs((vec3ld::dot(p1.getDr(), p1.getPt()) - vec3ld::dot(p2.getDr(), p2.getPt())) / p1.getDr().mag());
-		}
-		else {
-			return 0;
-		}
-	}
-
-
-	//line and plane functions
-
-	__host__ __device__ vec3ld intersection(line l, plane p, bool* error) {
-		if (vec3ld::dot(l.getDr(), p.getDr()) == 0) {
-			*error = true;//error , no solution of infinite solutions
-			return l.getPt();
-		}
-		else {
-			*error = false;//no error
-			long double lambda;
-			lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
-			vec3ld rVal = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
-			return rVal;
-		}
-	}
-
-	__host__ __device__ vec3ld intersectionRaw_s(line l, plane p) {
-		if (vec3ld::dot(l.getDr(), p.getDr()) == 0) {
-			return l.getPt();
-		}
-		else {
-			long double lambda;
-			lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
-			vec3ld rVal = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
-			return rVal;
-		}
-	}
-
-	__host__ __device__ vec3ld intersectionRaw(line l, plane p) {
-		long double lambda;
-		lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
-		vec3ld rVal = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
-		return rVal;
-	}
-
-
-	__host__ __device__ bool intersectionLambda(line l, plane p, long double& OUTlambda) {
-		if (vec3ld::dot(l.getDr(), p.getDr()) == 0) {
-			return true;
-		}
-		else {
-			OUTlambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
-			return false;
-		}
-	}
-
-	__host__ __device__ void intersectionLambdaRaw_s(line l, plane p, long double& OUTlambda, long double defaultVal) {
-		if (vec3ld::dot(l.getDr(), p.getDr()) == 0) {
-			OUTlambda = defaultVal;
-		}
-		else {
-			OUTlambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
-		}
-	}
-
-	__host__ __device__ long double intersectionLambdaRaw(line l, plane p) {
-		return (vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr()));
-	}
-
-
-	__host__ __device__ vec3ld getPt(line l, long double lambda) {
-		return (l.getPt() + lambda * l.getDr());
-	}
-
-	//ray cast
-
-	__host__ __device__ bool rayCast(line l, plane p, vec3ld& intersection) {
-		if (vec3ld::dot(l.getDr(), p.getDr()) == 0) {
-			intersection = l.getPt();
-			return 1;// multiple or no results
-		}
-		else {
-			long double lambda;
-			lambda = vec3ld::dot(p.getPt() - l.getPt(), p.getDr()) / vec3ld::dot(p.getDr(), l.getDr());
-			if (lambda < 0) {
-				intersection = l.getPt();
-				return 1;//no results
-			}
-			intersection = vec3ld::add(l.getPt(), vec3ld::multiply(l.getDr(), lambda));
+			intersection = vec3<T>::add(l.getPt(), vec3<T>::multiply(l.getDr(), lambda));
 		}
 	}
 
