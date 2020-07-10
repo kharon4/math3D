@@ -9,7 +9,7 @@ enum class coordinateName
 	zCoordinate = 2
 };
 
-namespace linearMath {//double precesion
+namespace linearMath {
 
 	template<typename T>
 	class line {
@@ -127,22 +127,22 @@ namespace linearMath {//double precesion
 
 
 
-	typedef line<double>		lineD;
-	typedef line<long double>	lineLD;
+	typedef line<double>		lined;
+	//typedef line<long double>	lineld; // does not work with cuda 10.2 long double is converted to double
 	typedef line<float>			linef;
-	typedef line<short>			lineS;
-	typedef line<int>			lineI;
-	typedef line<char>			lineC;
-	typedef line<unsigned char> lineUC;
+	typedef line<short>			lines;
+	typedef line<int>			linei;
+	typedef line<char>			linec;
+	typedef line<unsigned char> lineuc;
 
 
-	typedef plane<double>		planeD;
-	typedef plane<long double>	planeLD;
+	typedef plane<double>		planed;
+	//typedef plane<long double>planeLD; // does not work with cuda 10.2 long double is converted to double
 	typedef plane<float>		planef;
-	typedef plane<short>		planeS;
-	typedef plane<int>			planeI;
-	typedef plane<char>			planeC;
-	typedef plane<unsigned char>planeUC;
+	typedef plane<short>		planes;
+	typedef plane<int>			planei;
+	typedef plane<char>			planec;
+	typedef plane<unsigned char>planeuc;
 }
 
 

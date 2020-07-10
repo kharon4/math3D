@@ -4,7 +4,7 @@
 
 #include <math.h>
 
-namespace linearMath {//double precesion
+namespace linearMath {
 
 
 	//line class
