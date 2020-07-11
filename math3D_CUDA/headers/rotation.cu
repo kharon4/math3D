@@ -124,13 +124,9 @@ namespace manipulation3d{
 		rVal.x = vec3d::componentRaw_s(realCoord, axis[0]);
 		rVal.y = vec3d::componentRaw_s(realCoord, axis[1]);
 		rVal.z = vec3d::componentRaw_s(realCoord, axis[2]);
-		vec3d Scale = scale;
-		if (Scale.x == 0)Scale.x == 1;
-		if (Scale.y == 0)Scale.y == 1;
-		if (Scale.z == 0)Scale.z == 1;
-		rVal.x /= Scale.x;
-		rVal.y /= Scale.y;
-		rVal.z /= Scale.z;
+		if (scale.x != 0)rVal.x /= scale.x;
+		if (scale.y != 0)rVal.y /= scale.y;
+		if (scale.z != 0)rVal.z /= scale.z;
 		return rVal;
 	}
 
@@ -187,16 +183,26 @@ namespace manipulation3d{
 	}
 
 	__device__ __host__ void coordinateSystem::addRotationAboutAxis(vec3d W) {
-		transform T;
+		//transform T;
+		
 		vec3d angle = getRotationRaw_s(W);
-		T.CS.setAngle(angle);
-		vec3d oldAxis[3] = { axis[0],axis[1],axis[2] };
-		T.addVec(oldAxis[0], oldAxis);
-		T.addVec(oldAxis[1], oldAxis + 1);
-		T.addVec(oldAxis[2], oldAxis + 2);
+		//T.CS.setAngle(angle);
+		coordinateSystem CS(vec3d(0,0,0),angle,vec3d(1,1,1));//
+		vec3d oldAxis[3] = { axis[0],axis[1],axis[2] };//
+		oldAxis[0] = CS.getInCoordinateSystem(oldAxis[0]);//
+		oldAxis[1] = CS.getInCoordinateSystem(oldAxis[1]);//
+		oldAxis[2] = CS.getInCoordinateSystem(oldAxis[2]);//
+		//T.addVec(oldAxis[0], oldAxis);
+		//T.addVec(oldAxis[1], oldAxis + 1);
+		//T.addVec(oldAxis[2], oldAxis + 2);
 		angle.z = W.mag();
-		T.CS.setAngle(angle);
-		T.update();
+		//T.CS.setAngle(angle);
+		CS.setAngle(angle);
+		//T.update();
+		oldAxis[0] = CS.getRealWorldCoordinates(oldAxis[0]);
+		oldAxis[1] = CS.getRealWorldCoordinates(oldAxis[1]);
+		oldAxis[2] = CS.getRealWorldCoordinates(oldAxis[2]);
+
 		setAxis(oldAxis);
 	}
 	
