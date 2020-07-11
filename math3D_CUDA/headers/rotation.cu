@@ -7,8 +7,8 @@
 
 namespace manipulation3d{
 
-	__device__ __host__ double toDeg(double rad) { return rad * 180 / pi; }
-	__device__ __host__ double toRad(double deg) { return deg * pi / 180; }
+	__device__ __host__ double toDeg(double rad) { return rad * 180 / math3D_pi; }
+	__device__ __host__ double toRad(double deg) { return deg * math3D_pi / 180; }
 
 	__device__ __host__ vec3d getDir(double yaw, double pitch) {
 		vec3d newX = vec3d(cos(yaw), sin(yaw), 0);
@@ -23,9 +23,9 @@ namespace manipulation3d{
 			return vec3d(0, 0, 0);
 		}
 		*err = false;//no error
-		rval.y = (pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
+		rval.y = (math3D_pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
 		rval.x = vec3d::angleRaw(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
-		if (a.y < 0)rval.x = 2 * pi - rval.x;
+		if (a.y < 0)rval.x = 2 * math3D_pi - rval.x;
 		return rval;
 	}
 
@@ -34,17 +34,17 @@ namespace manipulation3d{
 		if (a.mag2() == 0) {
 			return defaultRVal;
 		}
-		rval.y = (pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
+		rval.y = (math3D_pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
 		rval.x = vec3d::angleRaw(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
-		if (a.y < 0)rval.x = 2 * pi - rval.x;
+		if (a.y < 0)rval.x = 2 * math3D_pi - rval.x;
 		return rval;
 	}
 	
 	__device__ __host__ vec3d getRotationRaw(const vec3d& a) {
 		vec3d rval;
-		rval.y = (pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
+		rval.y = (math3D_pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
 		rval.x = vec3d::angleRaw(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
-		if (a.y < 0)rval.x = 2 * pi - rval.x;
+		if (a.y < 0)rval.x = 2 * math3D_pi - rval.x;
 		return rval;
 	}
 
@@ -79,8 +79,8 @@ namespace manipulation3d{
 
 	__device__ __host__ void coordinateSystem::resetAxis() {
 		axis[0] = getDir(angle.x, angle.y);
-		axis[1] = getDir(angle.x + pi / 2, 0);
-		axis[2] = getDir(angle.x, angle.y + pi / 2);
+		axis[1] = getDir(angle.x + math3D_pi / 2, 0);
+		axis[2] = getDir(angle.x, angle.y + math3D_pi / 2);
 		//axis[1] and axis[2] are temp axes
 		vec3d cAxis[2];
 		cAxis[0] = vec3d::add(vec3d::multiply(axis[1], cos(angle.z)), vec3d::multiply(axis[2], sin(angle.z)));
@@ -107,9 +107,9 @@ namespace manipulation3d{
 	__device__ __host__ vec3d coordinateSystem::getAngle(vec3d* axis) const {
 		vec3d rVal;
 		rVal = getRotationRaw_s(axis[0]);
-		vec3d tempAxis = getDir(angle.x + pi / 2, 0);
+		vec3d tempAxis = getDir(angle.x + math3D_pi / 2, 0);
 		rVal.z = vec3d::angleRaw_s(tempAxis, axis[1]);
-		tempAxis = getDir(angle.x, angle.y + pi / 2);
+		tempAxis = getDir(angle.x, angle.y + math3D_pi / 2);
 		if (vec3d::dot(tempAxis, axis[1]) < 0)rVal.z *= -1;
 		return rVal;
 	}
@@ -152,8 +152,8 @@ namespace manipulation3d{
 
 		vec3d dir[3];
 		dir[0] = getDir(rot.x, rot.y);
-		dir[1] = getDir(rot.x + pi / 2, 0/*rot.y*/);
-		dir[2] = getDir(rot.x, rot.y + pi / 2);
+		dir[1] = getDir(rot.x + math3D_pi / 2, 0/*rot.y*/);
+		dir[2] = getDir(rot.x, rot.y + math3D_pi / 2);
 		{
 			vec3d temp[2];
 			temp[0] = vec3d::add(vec3d::multiply(dir[1], cos(rot.z)), vec3d::multiply(dir[2], sin(rot.z)));
@@ -206,20 +206,6 @@ namespace manipulation3d{
 		setAxis(oldAxis);
 	}
 	
-	//transform functions
-	template <typename T>
-	__host__ void transform<T>::addVec(vec3<T> val, vec3<T>* adress) {
-		data.push_back(CS.getInCoordinateSystem(val));
-		dataAddress.push_back(adress);
-	}
-
-	template <typename T>
-	__host__ void transform<T>::update() {
-		for (int i = 0; i < data.size(); ++i) {
-			*(dataAddress[i]) = CS.getRealWorldCoordinates(data[i]);
-		}
-	}
-
 	
 }
 

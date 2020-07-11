@@ -10,7 +10,8 @@
 #include "vec3.cuh"
 #include<vector>
 
-#define pi 3.14159
+
+#define math3D_pi 3.14159
 
 namespace manipulation3d {
 
@@ -62,31 +63,13 @@ namespace manipulation3d {
 
 	};
 
-
-
-	template<typename T>
-	class transform {
-	private:
-		std::vector <vec3<T>> data;
-		std::vector <vec3<T>*> dataAddress;
-	public:
-		coordinateSystem CS;
-		
-		__host__ transform() {};
-		__host__ void addVec(vec3<T> val, vec3<T>* address);
-		__host__ void update();
-
-		std::vector<vec3<T>>* getData() { return &data; }
-	};
-
-	typedef transform<double> transformd;
-	typedef transform<float> transformf;
 }
 
 
-
+/*
 #ifndef math3D_DeclrationOnly
 #ifndef INSIDE_ROTATION_CU_FILE
 #include "rotation.cu"
 #endif
 #endif
+*/

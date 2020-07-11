@@ -33,5 +33,6 @@
     <ClInclude Include="headers\vec3.cuh" />
     <ClInclude Include="headers\linearMath.cuh" />
     <ClInclude Include="headers\rotation.cuh" />
+    <ClInclude Include="headers\transform.cuh" />
   </ItemGroup>
 </Project>
