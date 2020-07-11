@@ -51,9 +51,9 @@ namespace manipulation3d{
 
 	//coordinate system functions
 
-	__device__ __host__ void coordinateSystem::setOrigin(vec3d vec) { origin = vec; }
-	__device__ __host__ void coordinateSystem::setAngle(vec3d vec) { angle = vec; reset = true; }
-	__device__ __host__ void coordinateSystem::setScale(vec3d vec) { scale = vec; reset = true; }
+	__device__ __host__ void coordinateSystem::setOrigin(const vec3d& vec) { origin = vec; }
+	__device__ __host__ void coordinateSystem::setAngle(const vec3d& vec) { angle = vec; reset = true; }
+	__device__ __host__ void coordinateSystem::setScale(const vec3d& vec) { scale = vec; reset = true; }
 	__device__ __host__ void coordinateSystem::setAxis(vec3d* Axis) {
 		axis[0] = Axis[0];
 		axis[1] = Axis[1];
@@ -65,12 +65,12 @@ namespace manipulation3d{
 		angle = getAngle(axis);
 	}
 
-	__device__ __host__ vec3d coordinateSystem::getOrigin() { return origin; }
-	__device__ __host__ vec3d coordinateSystem::getAngle() { return angle; }
-	__device__ __host__ vec3d coordinateSystem::getScale() { return scale; }
-	__device__ __host__ vec3d* coordinateSystem::getAxis() { if (reset)resetAxis(); reset = false; return axis; };
+	__device__ __host__ vec3d coordinateSystem::getOrigin() const { return origin; }
+	__device__ __host__ vec3d coordinateSystem::getAngle() const { return angle; }
+	__device__ __host__ vec3d coordinateSystem::getScale() const { return scale; }
+	__device__ __host__ const vec3d* coordinateSystem::getAxis() { if (reset)resetAxis(); reset = false; return axis; };
 
-	__device__ __host__ coordinateSystem::coordinateSystem(vec3d Origin, vec3d Rot, vec3d Scale) {
+	__device__ __host__ coordinateSystem::coordinateSystem(const vec3d& Origin, const vec3d& Rot, const vec3d& Scale) {
 		origin = Origin;
 		angle = Rot;
 		scale = Scale;
@@ -100,11 +100,11 @@ namespace manipulation3d{
 		axis[2] = cs.getAxis()[2];
 	}
 
-	__device__ __host__ vec3d coordinateSystem::getScale(vec3d* axis) {
+	__device__ __host__ vec3d coordinateSystem::getScale(vec3d* axis) const {
 		return vec3d(axis[0].mag(), axis[1].mag(), axis[2].mag());
 	}
 
-	__device__ __host__ vec3d coordinateSystem::getAngle(vec3d* axis) {
+	__device__ __host__ vec3d coordinateSystem::getAngle(vec3d* axis) const {
 		vec3d rVal;
 		rVal = getRotationRaw_s(axis[0]);
 		vec3d tempAxis = getDir(angle.x + pi / 2, 0);
@@ -114,23 +114,23 @@ namespace manipulation3d{
 		return rVal;
 	}
 
-	__device__ __host__ vec3d coordinateSystem::getInCoordinateSystem(vec3d realCoord) {
+	__device__ __host__ vec3d coordinateSystem::getInCoordinateSystem(const vec3d& realCoord) {
 		if (reset) {
 			resetAxis();
 			reset = false;
 		}
 		vec3d rVal;
-		realCoord = vec3d::subtract(realCoord, origin);
-		rVal.x = vec3d::componentRaw_s(realCoord, axis[0]);
-		rVal.y = vec3d::componentRaw_s(realCoord, axis[1]);
-		rVal.z = vec3d::componentRaw_s(realCoord, axis[2]);
+		vec3d relativeCoord = vec3d::subtract(realCoord, origin);
+		rVal.x = vec3d::componentRaw_s(relativeCoord, axis[0]);
+		rVal.y = vec3d::componentRaw_s(relativeCoord, axis[1]);
+		rVal.z = vec3d::componentRaw_s(relativeCoord, axis[2]);
 		if (scale.x != 0)rVal.x /= scale.x;
 		if (scale.y != 0)rVal.y /= scale.y;
 		if (scale.z != 0)rVal.z /= scale.z;
 		return rVal;
 	}
 
-	__device__ __host__ vec3d coordinateSystem::getRealWorldCoordinates(vec3d CSCoord) {
+	__device__ __host__ vec3d coordinateSystem::getRealWorldCoordinates(const vec3d& CSCoord) {
 		if (reset) {
 			resetAxis();
 			reset = false;
@@ -138,7 +138,7 @@ namespace manipulation3d{
 		return vec3d::add(origin, vec3d::add(vec3d::multiply(axis[0], CSCoord.x), vec3d::add(vec3d::multiply(axis[1], CSCoord.y), vec3d::multiply(axis[2], CSCoord.z))));
 	}
 
-	__device__ __host__ void coordinateSystem::addRelativeRot(vec3d rot) {
+	__device__ __host__ void coordinateSystem::addRelativeRot(const vec3d& rot) {
 
 		vec3d oldAxis[3];
 		vec3d Scale = scale;
@@ -169,7 +169,7 @@ namespace manipulation3d{
 		setAxis(newAxis);
 	}
 
-	__device__ __host__ void coordinateSystem::addRelativePos(vec3d pos) {
+	__device__ __host__ void coordinateSystem::addRelativePos(const vec3d& pos) {
 		vec3d Axis[3];
 		vec3d Scale = scale;
 		if (Scale.x == 0)Scale.x = 1;
@@ -182,7 +182,7 @@ namespace manipulation3d{
 		origin = vec3d::add(origin, vec3d::add(vec3d::multiply(Axis[0], pos.x), vec3d::add(vec3d::multiply(Axis[1], pos.y), vec3d::multiply(Axis[2], pos.z))));
 	}
 
-	__device__ __host__ void coordinateSystem::addRotationAboutAxis(vec3d W) {
+	__device__ __host__ void coordinateSystem::addRotationAboutAxis(const vec3d& W) {
 		//transform T;
 		
 		vec3d angle = getRotationRaw_s(W);
@@ -207,12 +207,14 @@ namespace manipulation3d{
 	}
 	
 	//transform functions
-	__host__ void transform::addVec(vec3d val, vec3d* adress) {
+	template <typename T>
+	__host__ void transform<T>::addVec(vec3<T> val, vec3<T>* adress) {
 		data.push_back(CS.getInCoordinateSystem(val));
 		dataAddress.push_back(adress);
 	}
 
-	__host__ void transform::update() {
+	template <typename T>
+	__host__ void transform<T>::update() {
 		for (int i = 0; i < data.size(); ++i) {
 			*(dataAddress[i]) = CS.getRealWorldCoordinates(data[i]);
 		}

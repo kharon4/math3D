@@ -37,46 +37,50 @@ namespace manipulation3d {
 	public:
 
 
-		__device__ __host__ void setOrigin(vec3d);
-		__device__ __host__ void setAngle(vec3d);
-		__device__ __host__ void setScale(vec3d);
+		__device__ __host__ void setOrigin(const vec3d&);
+		__device__ __host__ void setAngle(const vec3d&);
+		__device__ __host__ void setScale(const vec3d&);
 		__device__ __host__ void setAxis(vec3d*);
 
 
-		__device__ __host__ vec3d getOrigin();
-		__device__ __host__ vec3d getAngle();
-		__device__ __host__ vec3d getScale();
-		__device__ __host__ vec3d* getAxis();
+		__device__ __host__ vec3d getOrigin() const;
+		__device__ __host__ vec3d getAngle() const;
+		__device__ __host__ vec3d getScale() const;
+		__device__ __host__ const vec3d* getAxis();
 
 
-		__device__ __host__ coordinateSystem(vec3d Origin = vec3d(0, 0, 0), vec3d Rot = vec3d(0, 0, 0), vec3d Scale = vec3d(1, 1, 1));
+		__device__ __host__ coordinateSystem(const vec3d& Origin = vec3d(0, 0, 0), const vec3d& Rot = vec3d(0, 0, 0), const vec3d& Scale = vec3d(1, 1, 1));
 		__device__ __host__ void set(coordinateSystem& cs);
-		__device__ __host__ vec3d getAngle(vec3d* axis);
-		__device__ __host__ vec3d getScale(vec3d* axis);
-		__device__ __host__ void resetAxis();
-		__device__ __host__ vec3d getInCoordinateSystem(vec3d realCoord);
-		__device__ __host__ vec3d getRealWorldCoordinates(vec3d CSCoord);
-		__device__ __host__ void addRelativeRot(vec3d rot);
-		__device__ __host__ void addRelativePos(vec3d pos);
-		__device__ __host__ void addRotationAboutAxis(vec3d W);//rotation of |W| anticlocwise about w
+		__device__ __host__ vec3d getAngle(vec3d* axis) const;// gets angle of the axis wrt the coord system
+		__device__ __host__ vec3d getScale(vec3d* axis) const;//gets global scale
+		__device__ __host__ void resetAxis(); // recalculates axes based on scale and angle
+		__device__ __host__ vec3d getInCoordinateSystem(const vec3d& realCoord);
+		__device__ __host__ vec3d getRealWorldCoordinates(const vec3d& CSCoord);
+		__device__ __host__ void addRelativeRot(const vec3d& rot);
+		__device__ __host__ void addRelativePos(const vec3d& pos);
+		__device__ __host__ void addRotationAboutAxis(const vec3d& W);//rotation of |W| anticlocwise about w
 
 	};
 
 
+
+	template<typename T>
 	class transform {
 	private:
-		std::vector <vec3d> data;
-		std::vector <vec3d*> dataAddress;
+		std::vector <vec3<T>> data;
+		std::vector <vec3<T>*> dataAddress;
 	public:
 		coordinateSystem CS;
 		
 		__host__ transform() {};
-		__host__ void addVec(vec3d val, vec3d* address);
+		__host__ void addVec(vec3<T> val, vec3<T>* address);
 		__host__ void update();
 
-		std::vector<vec3d>* getData() { return &data; }
+		std::vector<vec3<T>>* getData() { return &data; }
 	};
 
+	typedef transform<double> transformd;
+	typedef transform<float> transformf;
 }
 
 
