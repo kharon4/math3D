@@ -18,6 +18,9 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\linearEqnSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -34,5 +37,8 @@
     <ClInclude Include="headers\linearMath.cuh" />
     <ClInclude Include="headers\rotation.cuh" />
     <ClInclude Include="headers\transform.cuh" />
+    <ClInclude Include="headers\linearEqnSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

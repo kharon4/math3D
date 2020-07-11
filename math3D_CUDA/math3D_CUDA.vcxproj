@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="src\linearEqnSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\cudaTest.cuh" />
+    <ClInclude Include="headers\linearEqnSolver.h" />
     <ClInclude Include="headers\linearMath.cuh" />
     <ClInclude Include="headers\rotation.cuh" />
     <ClInclude Include="headers\transform.cuh" />
