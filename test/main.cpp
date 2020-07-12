@@ -19,12 +19,14 @@ int main() {
 	LES::system sys(0,0);
 	sys.load(file);
 	sys.displayMatrix(std::cout);
-	sys.solve();
+	std::vector<double> rVal;
+	sys.getSolution(rVal);
 	std::cout << "\n solved version :\n";
 	sys.displayMatrix(std::cout);
 	std::cout << "\n solution :\n";
-	for (unsigned long int i = 0; i < sys.sols.size(); ++i) {
-		std::cout << sys.sols[i] << "  .  ";
+
+	for (unsigned long int i = 0; i < rVal.size(); ++i) {
+		std::cout << rVal[i] << "  .  ";
 	}
 	//eq.displayEqn(std::cout);
 	system("pause");

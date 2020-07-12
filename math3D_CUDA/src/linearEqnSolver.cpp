@@ -80,49 +80,59 @@ namespace LES {
 
 
 	system::system(unsigned long int noCoefficients, unsigned long int noEquations) {
+		solved = false;
 		noEqns = noEquations;
 		noCoef = noCoefficients;
 		eqns = new eqn[noEqns];
 		for (unsigned long int i = 0; i < noEqns; ++i) {
 			eqns[i].setNoCoeff(noCoefficients);
 		}
-
+		
 		calculateSysType();
 	}
 
 	inline unsigned long int system::getNoCoeff() const { return noCoef; }
 	inline unsigned long int system::getNoEqns() const { return noEqns; }
+	inline system::sysType system::getSystemType()const { return systemType; }
+
 
 	inline void system::changeNoCoeff(unsigned long int noC) {
+		solved = false;
 		noCoef = noC;
 		for (unsigned long int i = 0; i < noEqns; ++i)eqns[i].setNoCoeff(noC);
+		calculateSysType();
 	}
 
 	inline void system::changeNoEqns(unsigned long int noE) {
+		solved = false;
 		delete[] eqns;
 		eqns = nullptr;
 		eqns = new eqn[noE];
 		noEqns = noE;
 		for (unsigned long int i = 0; i < noE; ++i)eqns[i].setNoCoeff(noCoef);
+		calculateSysType();
 	}
 
 	inline void system::changeSystemSize(unsigned long int noC, unsigned long int noE) {
+		solved = false;
 		noCoef = noC;
 		noEqns = noE;
 		delete[] eqns;
 		eqns = nullptr;
 		eqns = new eqn[noE];
 		for (unsigned long int i = 0; i < noE; ++i)eqns[i].setNoCoeff(noC);
+		calculateSysType();
 	}
 
-	void system::displayMatrix(std::ostream& f, bool showVar) {
+	void system::displayMatrix(std::ostream& f, bool showVar) const {
 		for (unsigned long int i = 0; i < noEqns; ++i) {
 			eqns[i].displayEqn(f, showVar);
 			f << std::endl;
 		}
 	}
 
-	bool system::load(std::istream& f) {
+	void system::load(std::istream& f) {
+		solved = false;
 		unsigned long  int noC, noE;
 		f >> noC >> noE;
 		changeSystemSize(noC, noE);
@@ -135,7 +145,18 @@ namespace LES {
 		}
 	}
 
+	void system::load(unsigned long int noC, unsigned long int noE, double* arr) {
+		solved = false;
+		changeSystemSize(noC, noE);
+		for (unsigned long int i = 0; i < noE; ++i) {
+			for (unsigned long int j = 0; j <= noC; ++j) {
+				eqns[i].setCoeff(j, arr[i* (noC+1) + j]);
+			}
+		}
+	}
+
 	void system::solve() {
+		if (solved)return;
 		unsigned long int currentCno = 0;
 		unsigned long int currentEqn = 0;
 		unsigned long int minItt = ((noCoef < noEqns) ? noCoef : noEqns);//find minimum itterations
@@ -218,6 +239,14 @@ namespace LES {
 		else {
 			sols.resize(0);
 		}
+		solved = true;
+	}
+
+	system::solType system::getSolution(std::vector<double>& solutions) {
+		if (!solved) solve();
+		solutions.resize(0);
+		for (unsigned long int i = 0; i < sols.size(); ++i)solutions.push_back(sols[i]);
+		return solutionType;
 	}
 
 	system::~system() { delete[] eqns; }

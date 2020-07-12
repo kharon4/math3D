@@ -42,29 +42,32 @@ namespace LES {//Linear equation solver
 		eqn* eqns = nullptr;
 		unsigned long int noEqns = 0;
 		unsigned long int noCoef = 0;
-
+		bool solved = false;
 		void calculateSysType();
+		std::vector<double> sols;
 
 	public:
 
-		std::vector<double> sols;
-
+		
 		system(unsigned long int noCoefficients, unsigned long int noEquations);
 		~system();
 
 		inline unsigned long int getNoCoeff() const;
 		inline unsigned long int getNoEqns() const;
+		inline sysType getSystemType() const;
 
 		inline void changeNoCoeff(unsigned long int noC);
 		inline void changeNoEqns(unsigned long int noE);
 		inline void changeSystemSize(unsigned long int noC, unsigned long int noE);
 
-		void displayMatrix(std::ostream& f, bool showVar = false);
+		void displayMatrix(std::ostream& f, bool showVar = false) const;
 
-		bool load(std::istream& f);
+		void load(std::istream& f);
+		void load(unsigned long int noC , unsigned long int noE,double* arr);
 
-		void solve();
+		solType getSolution(std::vector<double>& solutions);
+
+		void solve();//must not be called explicitly if get solution was called
 		
-	
 	};
 }
