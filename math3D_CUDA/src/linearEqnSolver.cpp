@@ -79,8 +79,9 @@ namespace LES {
 	}
 
 
-	system::system(unsigned long int noCoefficients, unsigned long int noEquations) {
+	system::system(unsigned long int noCoefficients, unsigned long int noEquations){
 		solved = false;
+		notFound = 0;
 		noEqns = noEquations;
 		noCoef = noCoefficients;
 		eqns = new eqn[noEqns];
@@ -98,6 +99,7 @@ namespace LES {
 
 	inline void system::changeNoCoeff(unsigned long int noC) {
 		solved = false;
+		notFound = 0;
 		noCoef = noC;
 		for (unsigned long int i = 0; i < noEqns; ++i)eqns[i].setNoCoeff(noC);
 		calculateSysType();
@@ -105,6 +107,7 @@ namespace LES {
 
 	inline void system::changeNoEqns(unsigned long int noE) {
 		solved = false;
+		notFound = 0;
 		delete[] eqns;
 		eqns = nullptr;
 		eqns = new eqn[noE];
@@ -115,6 +118,7 @@ namespace LES {
 
 	inline void system::changeSystemSize(unsigned long int noC, unsigned long int noE) {
 		solved = false;
+		notFound = 0;
 		noCoef = noC;
 		noEqns = noE;
 		delete[] eqns;
@@ -155,8 +159,8 @@ namespace LES {
 		}
 	}
 
-	void system::solve() {
-		if (solved)return;
+	unsigned long int system::solve(bool forced , double dVal) {
+		if (solved && !(forced))return notFound;
 		unsigned long int currentCno = 0;
 		unsigned long int currentEqn = 0;
 		unsigned long int minItt = ((noCoef < noEqns) ? noCoef : noEqns);//find minimum itterations
@@ -236,10 +240,27 @@ namespace LES {
 				sols[i] = (eqns[i].getConst() - sum) / eqns[i].getCoeff(i);
 			}
 		}
+		else if (solutionType == solType::infiniteSols && forced) {
+			sols.resize(noCoef);
+
+			for (long long int i = noCoef - 1; i >= (noEqns - zRows); i--)sols[i] = dVal;
+			for (long long int i = noEqns - zRows - 1; i >= 0; i--) {//for every row
+				//calculate sum;
+				double sum = 0;
+				for (unsigned long int j = noCoef - 1; j > i; j--) {
+					sum += sols[j] * eqns[i].getCoeff(j);
+				}
+				sols[i] = (eqns[i].getConst() - sum) / eqns[i].getCoeff(i);
+			}
+			notFound = (noCoef - (noEqns - zRows));
+			return notFound;
+		}
 		else {
 			sols.resize(0);
 		}
+		notFound = 0;
 		solved = true;
+		return 0;
 	}
 
 	system::solType system::getSolution(std::vector<double>& solutions) {

@@ -45,7 +45,7 @@ namespace LES {//Linear equation solver
 		bool solved = false;
 		void calculateSysType();
 		std::vector<double> sols;
-
+		unsigned long int notFound = 0;//no of coeff not found because of infinite sols
 	public:
 
 		
@@ -67,7 +67,8 @@ namespace LES {//Linear equation solver
 
 		solType getSolution(std::vector<double>& solutions);
 
-		void solve();//must not be called explicitly if get solution was called
+		unsigned long int solve(bool forced = false , double dVal = 0);//must not be called explicitly if get solution was called
+		//returns the no of coefficents not found
 		
 	};
 }

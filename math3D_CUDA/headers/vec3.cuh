@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 
 #ifdef __NVCC__
 #pragma message("NVCC found . Compilling CUDA code : " __FILE__)
@@ -56,6 +57,8 @@ public:
 	inline static __host__ __device__ vec3<T> vecX(T val) { return vec3<T>(val, 0, 0); }
 	inline static __host__ __device__ vec3<T> vecY(T val) { return vec3<T>(0, val, 0); }
 	inline static __host__ __device__ vec3<T> vecZ(T val) { return vec3<T>(0, 0, val); }
+
+	inline __host__ void print(std::ostream& f) { f << "( " << x << " , " << y << " , " << z << " )"; }
 
 	__host__ __device__ vec3<T> operator + (const vec3<T>& other)const { return add(*this, other); }
 

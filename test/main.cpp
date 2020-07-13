@@ -15,7 +15,7 @@ int main() {
 
 	//non cuda lib test
 	//double arr[] = {10,19,23,45,20};
-	std::ifstream file("res/LES/10X10.txt",std::ios::in);
+	std::ifstream file("res/LES/circle.txt",std::ios::in);
 	LES::system sys(0,0);
 	sys.load(file);
 	sys.displayMatrix(std::cout);
