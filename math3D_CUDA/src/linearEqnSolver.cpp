@@ -252,6 +252,7 @@ namespace LES {
 				}
 				sols[i] = (eqns[i].getConst() - sum) / eqns[i].getCoeff(i);
 			}
+			solved = true;
 			notFound = (noCoef - (noEqns - zRows));
 			return notFound;
 		}
