@@ -7,6 +7,7 @@ namespace LES {
 	//eqn::eqn(){ constant = 0; }
 
 
+
 	eqn::eqn(unsigned long int noCoefficients, double* coeff, double Constant) {
 		constant = Constant;
 		coefficients.resize(noCoefficients);
@@ -66,6 +67,12 @@ namespace LES {
 
 
 	///System functions
+
+	bool system::isZero(double d) {
+		if (d <= zeroCondition && d >= -zeroCondition)return true;
+		return false;
+	}
+
 	void system::calculateSysType() {
 		if (noEqns < noCoef) {
 			systemType = sysType::underDefined;
@@ -80,6 +87,7 @@ namespace LES {
 
 
 	system::system(unsigned long int noCoefficients, unsigned long int noEquations){
+		zeroCondition = 0.0000000001;
 		solved = false;
 		notFound = 0;
 		noEqns = noEquations;
@@ -169,7 +177,7 @@ namespace LES {
 			{
 				unsigned long int j;
 				for (j = currentEqn; j < noEqns; ++j) {
-					if (eqns[j].getCoeff(currentCno) != 0) {//replace the eqn and get it to the top
+					if (!isZero(eqns[j].getCoeff(currentCno))) {//replace the eqn and get it to the top
 						eqn temp = eqns[currentEqn];
 						eqns[currentEqn] = eqns[j];
 						eqns[j] = temp;
@@ -201,15 +209,15 @@ namespace LES {
 		unsigned long int zRows = 0;
 		for (long long int i = noEqns - 1; i >= 0; i--) {
 			bool allZ = true;
-			for (long long int j = noCoef - 1; j >= 0; j--) {
-				if (eqns[i].getCoeff(j) != 0) {
+			for (long long int j = noCoef - 1; j >= 0; j--) {//check if the entire row has atleast 1 non zero
+				if (!isZero(eqns[i].getCoeff(j))) {
 					allZ = false;
 					break;
 				}
 			}
 			if (allZ) {
 				zRows++;
-				if (eqns[i].getConst() != 0) {
+				if (!isZero(eqns[i].getConst())) {
 					solutionType = solType::inconsistant;
 					break;
 				}
@@ -241,16 +249,24 @@ namespace LES {
 			}
 		}
 		else if (solutionType == solType::infiniteSols && forced) {
+			
 			sols.resize(noCoef);
-
-			for (long long int i = noCoef - 1; i >= (noEqns - zRows); i--)sols[i] = dVal;
+			for (unsigned long int i = 0; i < noCoef; ++i)sols[i] = dVal;
+			long long int currentCoeff = noCoef - 1;
 			for (long long int i = noEqns - zRows - 1; i >= 0; i--) {//for every row
 				//calculate sum;
 				double sum = 0;
-				for (unsigned long int j = noCoef - 1; j > i; j--) {
+				for (long long int j = noCoef - 1; j > currentCoeff; j--) {
 					sum += sols[j] * eqns[i].getCoeff(j);
 				}
-				sols[i] = (eqns[i].getConst() - sum) / eqns[i].getCoeff(i);
+				//avoid 0s
+				for(; currentCoeff >= 0; currentCoeff--){
+					if (!isZero(eqns[i].getCoeff(currentCoeff)))break;
+				}
+
+				if(currentCoeff >= 0)
+				sols[currentCoeff] = (eqns[i].getConst() - sum) / eqns[i].getCoeff(currentCoeff);
+				currentCoeff--;
 			}
 			solved = true;
 			notFound = (noCoef - (noEqns - zRows));

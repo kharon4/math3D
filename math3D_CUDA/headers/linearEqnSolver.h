@@ -37,6 +37,7 @@ namespace LES {//Linear equation solver
 		enum solType : unsigned char { uniqueSol = 0, inconsistant = 1, infiniteSols = 2 };
 		enum sysType : unsigned char { criticallyDefined = 0, underDefined = 1, overDefined = 2 };
 	private:
+		bool isZero(double d);
 		solType solutionType;
 		sysType systemType;
 		eqn* eqns = nullptr;
@@ -48,7 +49,9 @@ namespace LES {//Linear equation solver
 		unsigned long int notFound = 0;//no of coeff not found because of infinite sols
 	public:
 
-		
+
+		double zeroCondition;//Any val between [Zc and -Zc] is considered as 0 , set to 0 for exact check, dont make -ve
+
 		system(unsigned long int noCoefficients, unsigned long int noEquations);
 		~system();
 
