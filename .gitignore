@@ -6,5 +6,6 @@
 
 bin/intermediate/
 bin/Debug/
+bin/Release/Win32
 
 .vs/
