@@ -13,6 +13,7 @@
 	- [x] rotation
 - [x] CUDA supported vec3
 - [x] CUDA supported linear math
+- [X] A linear equation solver (gaussian elimination)
 
 ### Future plans :
 - [ ] support for Matrix based transformations

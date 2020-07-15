@@ -1,5 +1,5 @@
 #include <iostream>
-#include "headers/vec3.h"
+#include "vec3.cuh"
 //#include "headers/linearMath.h"
 //#include "headers/rotation.h"
 #include "linearEqnSolver.h"
@@ -15,7 +15,15 @@ int main() {
 
 	//non cuda lib test
 	//double arr[] = {10,19,23,45,20};
-	std::ifstream file("res/LES/circle.txt",std::ios::in);
+	
+	vec3d f;
+	std::cin >> f;
+
+	vec3f vec2(1, 2, 3);
+	std::cout << (f + vec2);
+	std::cout << std::endl;
+	//LES test
+	/*std::ifstream file("res/LES/circle.txt",std::ios::in);
 	LES::system sys(0,0);
 	sys.load(file);
 	sys.displayMatrix(std::cout);
@@ -29,5 +37,7 @@ int main() {
 		std::cout << rVal[i] << "  .  ";
 	}
 	//eq.displayEqn(std::cout);
+
+	*/
 	system("pause");
 }

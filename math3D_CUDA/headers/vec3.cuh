@@ -93,6 +93,11 @@ public:
 template <typename T>
 __host__ __device__ vec3<T> operator * (const double& other,const vec3<T>& vec) { return vec3<T>::multiply(vec, other); }
 
+template<typename T>
+std::ostream& operator << (std::ostream& f, vec3<T> vec);
+
+template<typename T>
+std::istream& operator >> (std::istream& f, vec3<T>& vec);
 
 //declaration macro
 #define declareVec3(type , name) typedef vec3<type> name;

@@ -198,3 +198,14 @@ __host__ __device__ bool vec3<T>::isEqual(const vec3<T>& a, const vec3<T>& b) {
 	}
 }
 
+template<typename T>
+std::ostream& operator << (std::ostream& f, vec3<T> vec) {
+	f << "[ " << vec.x << " | " << vec.y << " | " << vec.z << " ]";
+	return f;
+}
+
+template<typename T>
+std::istream& operator >> (std::istream& f, vec3<T>& vec) {
+	f >> vec.x >> vec.y >> vec.z;
+	return f;
+}

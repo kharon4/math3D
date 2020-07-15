@@ -154,9 +154,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\math3D\math3D.vcxproj">
-      <Project>{2cc6aba8-1d9c-469d-8876-5bc72c7d41e3}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\math3D_CUDA\math3D_CUDA.vcxproj">
       <Project>{19a4dc01-0079-49b0-a7eb-783966474cfe}</Project>
     </ProjectReference>

@@ -1,4 +1,4 @@
-# [ DEPRECATED ]
+# [ DEPRECATED | ARCHIVED ]
 
 >### Non CUDA version of the project is DEPRECATED and maintained only for backwards compatibility.
 
