@@ -2,6 +2,7 @@
 #include "rotation.cuh"
 
 namespace manipulation3d{
+
 template<typename T>
 class transform {
 private:
