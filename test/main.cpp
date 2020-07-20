@@ -3,10 +3,13 @@
 //#include "headers/linearMath.h"
 //#include "headers/rotation.h"
 #include "linearEqnSolver.h"
-
+#include "rotation.cuh"
 #include "cudaTest.cuh"
 
 #include<fstream>
+
+
+using namespace std;
 
 int main() {
 		
@@ -16,12 +19,15 @@ int main() {
 	//non cuda lib test
 	//double arr[] = {10,19,23,45,20};
 	
-	vec3d f;
-	std::cin >> f;
-
-	vec3f vec2(1, 2, 3);
-	std::cout << (f + vec2);
-	std::cout << std::endl;
+	manipulation3d::coordinateSystem cs;
+	cout << cs.getAngle() << endl;
+	cout << "axes : " << cs.getAxis()[0] << cs.getAxis()[1] << cs.getAxis()[2] << std::endl;
+	cs.addRotationAboutAxis(vec3d(1, 1, 1));
+	cout << "axes : " << cs.getAxis()[0] << cs.getAxis()[1] << cs.getAxis()[2] << std::endl;
+	cout << cs.getAngle() << endl;
+	
+	
+	
 	//LES test
 	/*std::ifstream file("res/LES/circle.txt",std::ios::in);
 	LES::system sys(0,0);

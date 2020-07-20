@@ -24,7 +24,7 @@ namespace manipulation3d{
 		}
 		*err = false;//no error
 		rval.y = (math3D_pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
-		rval.x = vec3d::angleRaw(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
+		rval.x = vec3d::angleRaw_s(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
 		if (a.y < 0)rval.x = 2 * math3D_pi - rval.x;
 		return rval;
 	}
@@ -35,7 +35,7 @@ namespace manipulation3d{
 			return defaultRVal;
 		}
 		rval.y = (math3D_pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
-		rval.x = vec3d::angleRaw(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
+		rval.x = vec3d::angleRaw_s(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
 		if (a.y < 0)rval.x = 2 * math3D_pi - rval.x;
 		return rval;
 	}
@@ -43,7 +43,7 @@ namespace manipulation3d{
 	__device__ __host__ vec3d getRotationRaw(const vec3d& a) {
 		vec3d rval(0, 0, 0);
 		rval.y = (math3D_pi / 2) - vec3d::angleRaw(a, vec3d(0, 0, 1));
-		rval.x = vec3d::angleRaw(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
+		rval.x = vec3d::angleRaw_s(vec3d(1, 0, 0), vec3d(a.x, a.y, 0));
 		if (a.y < 0)rval.x = 2 * math3D_pi - rval.x;
 		return rval;
 	}
@@ -59,10 +59,10 @@ namespace manipulation3d{
 		axis[1] = Axis[1];
 		axis[2] = Axis[2];
 		//set scale
-		scale = getScale(axis);
+		scale = getScale(Axis);
 
 		//set angle
-		angle = getAngle(axis);
+		angle = getAngle(Axis);
 		reset = false;
 	}
 
@@ -103,17 +103,17 @@ namespace manipulation3d{
 		reset = false;
 	}
 
-	__device__ __host__ vec3d coordinateSystem::getScale(vec3d* axis) const {
-		return vec3d(axis[0].mag(), axis[1].mag(), axis[2].mag());
+	__device__ __host__ vec3d coordinateSystem::getScale(vec3d* Axis) const {
+		return vec3d(Axis[0].mag(), Axis[1].mag(), Axis[2].mag());
 	}
 
-	__device__ __host__ vec3d coordinateSystem::getAngle(vec3d* axis) const {
+	__device__ __host__ vec3d coordinateSystem::getAngle(vec3d* Axis) const {
 		vec3d rVal;
-		rVal = getRotationRaw_s(axis[0]);
-		vec3d tempAxis = getDir(angle.x + math3D_pi / 2, 0);
-		rVal.z = vec3d::angleRaw_s(tempAxis, axis[1]);
-		tempAxis = getDir(angle.x, angle.y + math3D_pi / 2);
-		if (vec3d::dot(tempAxis, axis[1]) < 0)rVal.z *= -1;
+		rVal = getRotationRaw_s(Axis[0]);
+		vec3d tempAxis = getDir(rVal.x + math3D_pi / 2, 0);
+		rVal.z = vec3d::angleRaw_s(tempAxis, Axis[1]);
+		tempAxis = getDir(rVal.x + math3D_pi / 2, rVal.y);
+		if (vec3d::dot(tempAxis, Axis[1]) < 0)rVal.z *= -1;
 		return rVal;
 	}
 
@@ -219,18 +219,17 @@ namespace manipulation3d{
 
 	__device__ __host__ void coordinateSystem::addRotationAboutAxis(const vec3d& W) {
 		if (reset)resetAxis();
-		vec3d angle = getRotationRaw_s(W);
-		coordinateSystem CS(vec3d(0,0,0),angle,vec3d(1,1,1));
-		vec3d oldAxis[3] = { axis[0],axis[1],axis[2] };
-		oldAxis[0] = CS.getInCoordinateSystem(oldAxis[0]);
-		oldAxis[1] = CS.getInCoordinateSystem(oldAxis[1]);
-		oldAxis[2] = CS.getInCoordinateSystem(oldAxis[2]);
-		angle.z = W.mag();
-		CS.setAngle(angle);
+		vec3d __angle = getRotationRaw_s(W);
+		coordinateSystem CS( vec3d(0,0,0) ,__angle , vec3d(1,1,1));
+		vec3d oldAxis[3];
+		oldAxis[0] = CS.getInCoordinateSystem(axis[0]);
+		oldAxis[1] = CS.getInCoordinateSystem(axis[1]);
+		oldAxis[2] = CS.getInCoordinateSystem(axis[2]);
+		__angle.z = W.mag();
+		CS.setAngle(__angle);
 		oldAxis[0] = CS.getRealWorldCoordinates(oldAxis[0]);
 		oldAxis[1] = CS.getRealWorldCoordinates(oldAxis[1]);
 		oldAxis[2] = CS.getRealWorldCoordinates(oldAxis[2]);
-
 		setAxis(oldAxis);
 	}
 	
