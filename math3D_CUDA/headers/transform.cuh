@@ -38,7 +38,7 @@ private:
 public:
 	manipulation3d::coordinateSystem &CS;
 
-	__host__ transform(coordinateSystem& system):CS(system) {};
+	__host__ transformExternal(coordinateSystem& system):CS(system) {};
 	__host__ void addVec(vec3<T> val, vec3<T>* address, coordinateSystem::transformationType type = coordinateSystem::transformationType::all) {
 		data.push_back(CS.getInCoordinateSystem(val, type));
 		dataAddress.push_back(address);
