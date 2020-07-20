@@ -34,9 +34,14 @@ namespace manipulation3d {
 		vec3d angle;
 		vec3d scale;
 		vec3d axis[3];
-		bool reset = true;
+		bool reset = true;//calculate axis
 	public:
 
+		enum class transformationType:unsigned char { 
+			translation = 1, rotation = 2 , scaling = 4, 
+			TR = 3 , TS = 5 , RS = 6,
+			none = 0, all = 7
+		};
 
 		__device__ __host__ void setOrigin(const vec3d&);
 		__device__ __host__ void setAngle(const vec3d&);
@@ -55,8 +60,8 @@ namespace manipulation3d {
 		__device__ __host__ vec3d getAngle(vec3d* axis) const;// gets angle of the axis wrt the coord system
 		__device__ __host__ vec3d getScale(vec3d* axis) const;//gets global scale
 		__device__ __host__ void resetAxis(); // recalculates axes based on scale and angle
-		__device__ __host__ vec3d getInCoordinateSystem(const vec3d& realCoord);
-		__device__ __host__ vec3d getRealWorldCoordinates(const vec3d& CSCoord);
+		__device__ __host__ vec3d getInCoordinateSystem(const vec3d& realCoord , const transformationType type = transformationType::all);
+		__device__ __host__ vec3d getRealWorldCoordinates(const vec3d& CSCoord , const transformationType type = transformationType::all);
 		__device__ __host__ void addRelativeRot(const vec3d& rot);
 		__device__ __host__ void addRelativePos(const vec3d& pos);
 		__device__ __host__ void addRotationAboutAxis(const vec3d& W);//rotation of |W| anticlocwise about w
@@ -64,12 +69,3 @@ namespace manipulation3d {
 	};
 
 }
-
-
-/*
-#ifndef math3D_DeclrationOnly
-#ifndef INSIDE_ROTATION_CU_FILE
-#include "rotation.cu"
-#endif
-#endif
-*/
