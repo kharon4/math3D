@@ -40,5 +40,6 @@
     <ClInclude Include="headers\linearEqnSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\vec.cuh" />
   </ItemGroup>
 </Project>

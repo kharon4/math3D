@@ -1,13 +1,15 @@
 #include <iostream>
-#include "vec3.cuh"
+//#include "vec3.cuh"
 //#include "headers/linearMath.h"
 //#include "headers/rotation.h"
-#include "linearEqnSolver.h"
-#include "rotation.cuh"
-#include "cudaTest.cuh"
+//#include "linearEqnSolver.h"
+//#include "rotation.cuh"
+//#include "cudaTest.cuh"
 
 #include<fstream>
 
+
+#include "vec.cuh"
 
 using namespace std;
 
@@ -18,15 +20,6 @@ int main() {
 
 	//non cuda lib test
 	//double arr[] = {10,19,23,45,20};
-	
-	manipulation3d::coordinateSystem cs;
-	cout << cs.getAngle() << endl;
-	cout << "axes : " << cs.getAxis()[0] << cs.getAxis()[1] << cs.getAxis()[2] << std::endl;
-	cs.addRotationAboutAxis(vec3d(1, 1, 1));
-	cout << "axes : " << cs.getAxis()[0] << cs.getAxis()[1] << cs.getAxis()[2] << std::endl;
-	cout << cs.getAngle() << endl;
-	
-	
 	
 	//LES test
 	/*std::ifstream file("res/LES/circle.txt",std::ios::in);
@@ -45,5 +38,12 @@ int main() {
 	//eq.displayEqn(std::cout);
 
 	*/
+
+	vec<5, float> vec(1,1,1,1,1);
+	vec.normalize();
+
+	auto v = vec;
+	cout << v.at<0>() << ' ' << v.at<1>() << ' ' << v.at<2>() << ' ' << v.at<3>() << ' ' << v.at<4>() << '\n';
+	
 	system("pause");
 }

@@ -163,6 +163,7 @@
     <ClInclude Include="headers\linearMath.cuh" />
     <ClInclude Include="headers\rotation.cuh" />
     <ClInclude Include="headers\transform.cuh" />
+    <ClInclude Include="headers\vec.cuh" />
     <ClInclude Include="headers\vec3.cuh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
