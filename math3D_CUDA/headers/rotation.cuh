@@ -6,12 +6,11 @@
 //eulers angles are meaasured from respective axis + in the direction of the axis
 //vec3 is used to store yaw , pitch and roll as x , y , z components respectively
 //assuming right handed coordinate system
-
+#include "math3D_Constants.h"
 #include "vec3.cuh"
 #include<vector>
 
 
-#define math3D_pi 3.14159
 
 namespace manipulation3d {
 

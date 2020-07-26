@@ -10,7 +10,7 @@
 
 
 #include "vec.cuh"
-
+#include "vec3Specialized.cuh"
 using namespace std;
 
 int main() {
@@ -39,11 +39,9 @@ int main() {
 
 	*/
 
-	vec<5, float> vec(1,1,1,1,1);
-	vec.normalize();
-
-	auto v = vec;
-	cout << v.at<0>() << ' ' << v.at<1>() << ' ' << v.at<2>() << ' ' << v.at<3>() << ' ' << v.at<4>() << '\n';
 	
+	vec3S<float> v;
+	cin >>v.V;
+
 	system("pause");
 }

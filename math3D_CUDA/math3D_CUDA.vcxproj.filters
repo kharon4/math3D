@@ -41,5 +41,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\vec.cuh" />
+    <ClInclude Include="headers\math3D_Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\vec3Specialized.cuh" />
   </ItemGroup>
 </Project>

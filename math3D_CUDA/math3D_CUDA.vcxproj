@@ -161,10 +161,12 @@
     <ClInclude Include="headers\cudaTest.cuh" />
     <ClInclude Include="headers\linearEqnSolver.h" />
     <ClInclude Include="headers\linearMath.cuh" />
+    <ClInclude Include="headers\math3D_Constants.h" />
     <ClInclude Include="headers\rotation.cuh" />
     <ClInclude Include="headers\transform.cuh" />
     <ClInclude Include="headers\vec.cuh" />
     <ClInclude Include="headers\vec3.cuh" />
+    <ClInclude Include="headers\vec3Specialized.cuh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
